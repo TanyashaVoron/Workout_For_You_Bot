@@ -40,6 +40,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         Map<String, String> mapOutput = new HashMap<>();
         private final Map<String,Integer> currentWorkoutExercise = new HashMap<>();
         private boolean keyComExeBool = false;
+        ArrayList<String> expection = new ArrayList<>();
         Storage()
         {
             mapOutput.put("start", """
@@ -82,29 +83,35 @@ public class TelegramBot extends TelegramLongPollingBot {
             mapOutput.put("lastExe", """
                 Молодец! Осталось последнее упражнение!
                 Пиши (done) когда закончишь!""");
-            mapOutput.put("finish","""
-                Пиши (finish) когда закончишь!
+            mapOutput.put("continue","""
+                (continue) следующее упражнение!
                 (exit) если хочешь прервать тренеровку и выйти""");
+            mapOutput.put("time","У тебя 60 секунд!");
             mapOutput.put("timeIsOver", """
                 Ой, что-то ты долго..
                 Пиши
                 (addTime) тогда я дам тебе еще немного времени
-                (finish) если хотешь приступить к следующему упражнению
+                (continue) если хотешь приступить к следующему упражнению
                 (exit) если хочешь прервать тренеровку и выйти""");
             mapOutput.put("exit", "Пока! Возвращайся:)");
             mapOutput.put("error", "Не понимаю( Введи команду правильно (без пробелов, с маленькой буквы, без скобок или кавычек)");
+            mapOutput.put("work","Время еще не закончилось! продолжай делать упражнение)");
+            expection.add("Время пошло!");
         }
-        HashMap<String,ArrayList<String>> getResponse(String command)
-        {
+        HashMap<String,ArrayList<String>> getResponse(String command) {
             String resp = mapOutput.get(command);
             HashMap<String, ArrayList<String>> ans = new HashMap<>();
 
             if (!availableCommands.contains(command) || resp == null){
+                //if(Objects.equals(command, "Время пошло!"))
+                //ans.put(mapOutput.get("work"),availableCommands);
+                //else
                 ans.put(mapOutput.get("error"),availableCommands);
                 return ans;
             }
 
-            if (Objects.equals(command, "finish") || Objects.equals(command, "addTime")) {
+            if (Objects.equals(command, "continue") || Objects.equals(command, "addTime")) {
+                //если addTime надо currentWorkoutExercise.put(command,currentWorkoutExercise.get("up")-1);
                 if (keyComExeBool)
                     command = "up";
                 else
@@ -138,11 +145,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                         currentWorkoutExercise.put("up",0);
 
                     if (currentWorkoutExercise.get("up")<5){
-                        availableCommands.add("finish");
+                        availableCommands.add("continue");
                         availableCommands.add("exit");
                         keyComExeBool = true;
                         currentWorkoutExercise.put("up",currentWorkoutExercise.get("up")+1);
-                        ans.put(resp.split("\n")[currentWorkoutExercise.get("up")-1]+"\n"+mapOutput.get("finish"),availableCommands);
+                        ans.put(resp.split("\n")[currentWorkoutExercise.get("up")-1]+"\n"+mapOutput.get("time"),expection);
+                        ans.put(mapOutput.get("continue"),availableCommands);
                         return ans;
                     }
                     availableCommands.clear();
@@ -156,10 +164,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                         currentWorkoutExercise.put("down",0);
 
                     if (currentWorkoutExercise.get("down")<5){
-                        availableCommands.add("finish");
+                        availableCommands.add("continue");
                         availableCommands.add("exit");
-                        currentWorkoutExercise.put("down",currentWorkoutExercise.get("down")+1);
-                        ans.put(resp.split("\n")[currentWorkoutExercise.get("down")-1]+"\n"+mapOutput.get("finish"),availableCommands);
+                        ans.put(resp.split("\n")[currentWorkoutExercise.get("down")-1]+"\n"+mapOutput.get("time"),expection);
+                        ans.put(mapOutput.get("continue"),availableCommands);
                         return ans;
                     }
 
@@ -168,15 +176,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                     resp = mapOutput.get("lastExe")+"\n"+resp.split("\n")[currentWorkoutExercise.get("down")];
                     currentWorkoutExercise.clear();
                 }
-                case ("timeIsOver") -> {
-                    availableCommands.add("exit");
-                    availableCommands.add("finish");
-                    availableCommands.add("addTime");
-                }
                 case ("exit") -> {
                     availableCommands.add("start");
                     currentWorkoutExercise.clear();
                     keyComExeBool = false;
+
                 }
             }
             ans.put(resp,availableCommands);
@@ -206,19 +210,23 @@ public class TelegramBot extends TelegramLongPollingBot {
         return replyKeyboardMarkup;
     }
 
-    public Map<String,ReplyKeyboardMarkup> parseMessage(String textMsg) {
+    public Map<String,ReplyKeyboardMarkup> parseMessage(String textMsg) throws InterruptedException {
+        Map<String, ReplyKeyboardMarkup> ans = new HashMap<>();
         //получили (текст для вывода: [возможные команды для ввода])
         Map<String,ArrayList<String>> map = new HashMap<>(storage.getResponse(textMsg));
         //извлекли текст для вывода
         ArrayList<String> listCommand = new ArrayList<>(map.keySet());
-        String key=listCommand.get(0);
-        //извлекли [возможные команды]
-        ArrayList<String> listCommandByKey = new ArrayList<>(map.get(key));
-        //создали клавиатуру по [] возможныхкоманд
-        ReplyKeyboardMarkup keyboard =new ReplyKeyboardMarkup(initKeyboard(listCommandByKey).getKeyboard());
-        //записали это а виде (текст для вывода, клавиатура)
-        Map<String,ReplyKeyboardMarkup> ans = new HashMap<>();
-        ans.put(key,keyboard);
+        while (!listCommand.isEmpty()) {
+            String key = listCommand.get(0);
+            //извлекли [возможные команды]
+            ArrayList<String> listCommandByKey = new ArrayList<>(map.get(key));
+            //if(listCommandByKey.get(0)==null)
+            //создали клавиатуру по [] возможныхкоманд
+            ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(initKeyboard(listCommandByKey).getKeyboard());
+            //записали это а виде (текст для вывода, клавиатура)
+            ans.put(key, keyboard);
+            listCommand.remove(0);
+        }
         return ans;
     }
 
@@ -235,22 +243,32 @@ public class TelegramBot extends TelegramLongPollingBot {
                 Map<String,ReplyKeyboardMarkup> ansMap = new HashMap<>(parseMessage(inMess.getText()));
                 //извлекаем текст для вывода
                 ArrayList<String> listkeyb = new ArrayList<>(ansMap.keySet());
-                String response = listkeyb.get(0);
-                //извлекаем клавиатуру
-                ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(ansMap.get(response).getKeyboard());
-                //Создаем объект класса SendMessage - наш будущий ответ пользователю
-                SendMessage answer = new SendMessage();
+                int count = 0;
+                while(listkeyb.size()>0){
+                    if (count==1)
+                        Thread.sleep(5000);
+                    String response = listkeyb.get(0);
+                    //извлекаем клавиатуру
+                    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(ansMap.get(response).getKeyboard());
+                    //Создаем объект класса SendMessage - наш будущий ответ пользователю
+                    SendMessage answer = new SendMessage();
 
-                //Добавляем в наше сообщение id чата, а также наш ответ
-                answer.setChatId(chatId);
-                answer.setText(response);
-                answer.setReplyMarkup(replyKeyboardMarkup);
+                    //Добавляем в наше сообщение id чата, а также наш ответ
+                    answer.setChatId(chatId);
+                    answer.setText(response);
+                    answer.setReplyMarkup(replyKeyboardMarkup);
 
-                //Отправка в чат
-                execute(answer);
+                    //Отправка в чат
+                    execute(answer);
+                    //удаляем последний элемент
+                    listkeyb.remove(0);
+                    count++;
+                }
             }
         } catch (TelegramApiException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }
