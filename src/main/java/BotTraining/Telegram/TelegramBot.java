@@ -14,10 +14,8 @@ import java.util.*;
 public class TelegramBot extends TelegramLongPollingBot {
     private final String name;
     private final String token;
-
     Storage storage;
     private final ArrayList<String> availableCommands;
-
     public TelegramBot(String name, String token){
         this.name = name;
         this.token = token;
@@ -37,10 +35,12 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     public class Storage {
+        //база данных вывода ключ-команда
         Map<String, String> mapOutput = new HashMap<>();
+        //пара ключ-команда(up, down), содержимое-номер упражнения
         private final Map<String,Integer> currentWorkoutExercise = new HashMap<>();
+        //флаг 1-up. 0-down
         private boolean keyComExeBool = false;
-        ArrayList<String> expection = new ArrayList<>();
         Storage()
         {
             mapOutput.put("start", """
@@ -61,138 +61,113 @@ public class TelegramBot extends TelegramLongPollingBot {
                 (down) - ноги и ягодицы.
                 (exit) если хочешь выйти""");
             mapOutput.put("up","""
-                1. Жим штанги лёжа - 3-4 подхода по 6-8 повторений.
-                2. Тяга штанги к поясу - 3-4 подхода по 6-8 повторений.
-                3. Жим штанги с груди стоя - 3-4 подхода по 8-12 повторений.
-                4. Отжимания от брусьев - 3-4 подхода по 8-15 повторений.
-                5. Подтягивания обратным хватом - 3-4 подхода по 8-15 повторений.
-                6. Махи гантелями в стороны - 3-4 подхода по 10-15 повторений.""");
+                1. Бабочка лежа на животе.
+                2. Поднятие корпуса лежа с согнутыми в коленях ногами.
+                3. Скручивания лежа.
+                4. Отжимания с шагом в сторону.
+                5. Обратные отжимания.
+                6. Планка со сменой рук.""");
             mapOutput.put("down", """
-                1. Приседания со штангой: 4 подхода по 6-8, 6-8, 8-10, 8-10 повторений
-                2. Жим ногами: 3 подхода по 10-12 повторений без отдыха.
-                3. Шагающие выпады с гантелями: 3 подхода по 10, 12, 14 шагов на каждую ногу.
-                4. Подъемы на носки стоя: 4 подхода по 12, 12, 20, 20 повторений.
-                5. Приседания с гирей (гоблет): 4 подхода по 10-12 повторений, отдых 90 секунд.
-                6. Обратные выпады в тренажере Смита: 3 подхода по 10-12 повторений на каждую ногу без отдыха.""");
+                1. Велосипед.
+                2. Ягодичный мост в статике.
+                3. Присед, руки касаются пола.
+                4. Выпады назад.
+                5. Альпинист.
+                6. Приведение бедра для внутренней части бедра.""");
             mapOutput.put("done", """
+                Время вышло!
                 Ты молодец!
                 Продолжим тренировку?
                 (go) - хочу ещё,
                 (exit) - заканчиваю
                 (info) - хочу узнать о тебе больше""");
             mapOutput.put("lastExe", """
-                Молодец! Осталось последнее упражнение!
+                Так держать! Осталось последнее упражнение!
                 Пиши (done) когда закончишь!""");
-            mapOutput.put("continue","""
-                (continue) следующее упражнение!
+            mapOutput.put("next","""
+                Время вышло!
+                (next) следующее упражнение!
                 (exit) если хочешь прервать тренеровку и выйти""");
             mapOutput.put("time","У тебя 60 секунд!");
-            mapOutput.put("timeIsOver", """
-                Ой, что-то ты долго..
-                Пиши
-                (addTime) тогда я дам тебе еще немного времени
-                (continue) если хотешь приступить к следующему упражнению
-                (exit) если хочешь прервать тренеровку и выйти""");
             mapOutput.put("exit", "Пока! Возвращайся:)");
             mapOutput.put("error", "Не понимаю( Введи команду правильно (без пробелов, с маленькой буквы, без скобок или кавычек)");
-            mapOutput.put("work","Время еще не закончилось! продолжай делать упражнение)");
-            expection.add("Время пошло!");
         }
-        HashMap<String,ArrayList<String>> getResponse(String command) {
-            String resp = mapOutput.get(command);
-            HashMap<String, ArrayList<String>> ans = new HashMap<>();
+        ArrayList<String> getResponse(String command) {
+            ArrayList<String> outputStrList = new ArrayList<>();
+            outputStrList.add(mapOutput.get(command));
 
-            if (!availableCommands.contains(command) || resp == null){
-                //if(Objects.equals(command, "Время пошло!"))
-                //ans.put(mapOutput.get("work"),availableCommands);
-                //else
-                ans.put(mapOutput.get("error"),availableCommands);
-                return ans;
+            if (!availableCommands.contains(command) || outputStrList.get(0) == null){
+                outputStrList.clear();
+                outputStrList.add(mapOutput.get("error"));
+                return outputStrList;
             }
 
-            if (Objects.equals(command, "continue") || Objects.equals(command, "addTime")) {
-                //если addTime надо currentWorkoutExercise.put(command,currentWorkoutExercise.get("up")-1);
+            if (Objects.equals(command, "next")) {
                 if (keyComExeBool)
                     command = "up";
                 else
                     command = "down";
-                resp = mapOutput.get(command);
-
+                outputStrList.add(mapOutput.get(command));
             }
 
             availableCommands.clear();
+
             switch (command) {
-                case ("start") -> {
+                case "start" -> {
                     availableCommands.add("info");
                     availableCommands.add("go");
                 }
-                case ("info") -> {
+                case "info" -> {
                     availableCommands.add("exit");
                     availableCommands.add("go");
                 }
-                case ("go") -> {
-                    availableCommands.add("up");
+                case "go" -> {
+                    availableCommands.add("exit");
                     availableCommands.add("down");
-                    availableCommands.add("exit");
+                    availableCommands.add("up");
                 }
-                case ("done") -> {
+                case "done" -> {
+                    availableCommands.add("exit");
                     availableCommands.add("info");
                     availableCommands.add("go");
-                    availableCommands.add("exit");
                 }
-                case ("up") -> {
-                    if (currentWorkoutExercise.isEmpty())
-                        currentWorkoutExercise.put("up",0);
-
-                    if (currentWorkoutExercise.get("up")<5){
-                        availableCommands.add("continue");
-                        availableCommands.add("exit");
-                        keyComExeBool = true;
-                        currentWorkoutExercise.put("up",currentWorkoutExercise.get("up")+1);
-                        ans.put(resp.split("\n")[currentWorkoutExercise.get("up")-1]+"\n"+mapOutput.get("time"),expection);
-                        ans.put(mapOutput.get("continue"),availableCommands);
-                        return ans;
-                    }
-                    availableCommands.clear();
-                    availableCommands.add("done");
-                    resp = mapOutput.get("lastExe")+"\n"+resp.split("\n")[currentWorkoutExercise.get("up")];
-                    currentWorkoutExercise.clear();
-                    keyComExeBool = false;
-                }
-                case ("down") -> {
-                    if (currentWorkoutExercise.isEmpty())
-                        currentWorkoutExercise.put("down",0);
-
-                    if (currentWorkoutExercise.get("down")<5){
-                        availableCommands.add("continue");
-                        availableCommands.add("exit");
-                        ans.put(resp.split("\n")[currentWorkoutExercise.get("down")-1]+"\n"+mapOutput.get("time"),expection);
-                        ans.put(mapOutput.get("continue"),availableCommands);
-                        return ans;
-                    }
-
-                    availableCommands.clear();
-                    availableCommands.add("done");
-                    resp = mapOutput.get("lastExe")+"\n"+resp.split("\n")[currentWorkoutExercise.get("down")];
-                    currentWorkoutExercise.clear();
-                }
-                case ("exit") -> {
+                case "exit" -> {
                     availableCommands.add("start");
                     currentWorkoutExercise.clear();
                     keyComExeBool = false;
-
                 }
             }
-            ans.put(resp,availableCommands);
-            return ans;
+
+            if(Objects.equals(command, "up") || Objects.equals(command, "down")) {
+                outputStrList.clear();
+                if (currentWorkoutExercise.isEmpty())
+                    currentWorkoutExercise.put(command, 0);
+
+                if (currentWorkoutExercise.get(command) < 5) {
+                    availableCommands.add("exit");
+                    availableCommands.add("next");
+                    keyComExeBool = command.equals("up");
+                    currentWorkoutExercise.put(command, currentWorkoutExercise.get(command) + 1);
+                    outputStrList.add(mapOutput.get(command).split("\n")[currentWorkoutExercise.get(command) - 1] + "\n" + mapOutput.get("time"));
+                    outputStrList.add(mapOutput.get("next"));
+                    return outputStrList;
+                }
+                availableCommands.clear();
+                availableCommands.add("done");
+                outputStrList.add(mapOutput.get("lastExe") + "\n" + mapOutput.get(command).split("\n")[currentWorkoutExercise.get(command)]);
+                currentWorkoutExercise.clear();
+                keyComExeBool = false;
+            }
+            return outputStrList;
         }
     }
 
-    ReplyKeyboardMarkup initKeyboard(ArrayList<String> listCommand) {
+    ReplyKeyboardMarkup initKeyboard() {
+        ArrayList<String> listCommand = new ArrayList<>(availableCommands.stream().toList());
         //Создаем объект будущей клавиатуры и выставляем нужные настройки
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setResizeKeyboard(true); //подгоняем размер
-        replyKeyboardMarkup.setOneTimeKeyboard(false); //скрываем после использования
+        //replyKeyboardMarkup.setResizeKeyboard(true); //подгоняем размер
+        //replyKeyboardMarkup.setOneTimeKeyboard(false); //скрываем после использования
         //Создаем список с рядами кнопок
         List<KeyboardRow> keyboardRows = new ArrayList<>();
 
@@ -206,28 +181,44 @@ public class TelegramBot extends TelegramLongPollingBot {
             replyKeyboardMarkup.setKeyboard(keyboardRows);
             listCommand.remove(listCommand.size()-1);
         }
-
         return replyKeyboardMarkup;
     }
 
-    public Map<String,ReplyKeyboardMarkup> parseMessage(String textMsg) throws InterruptedException {
-        Map<String, ReplyKeyboardMarkup> ans = new HashMap<>();
-        //получили (текст для вывода: [возможные команды для ввода])
-        Map<String,ArrayList<String>> map = new HashMap<>(storage.getResponse(textMsg));
-        //извлекли текст для вывода
-        ArrayList<String> listCommand = new ArrayList<>(map.keySet());
-        while (!listCommand.isEmpty()) {
-            String key = listCommand.get(0);
-            //извлекли [возможные команды]
-            ArrayList<String> listCommandByKey = new ArrayList<>(map.get(key));
-            //if(listCommandByKey.get(0)==null)
-            //создали клавиатуру по [] возможныхкоманд
-            ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(initKeyboard(listCommandByKey).getKeyboard());
-            //записали это а виде (текст для вывода, клавиатура)
-            ans.put(key, keyboard);
-            listCommand.remove(0);
+    public ArrayList<SendMessage> objMessageList(String text, String chatId) throws InterruptedException {
+        ArrayList<SendMessage> outputObjList = new ArrayList<>();
+        ArrayList<String> outputStrList = new ArrayList<>(storage.getResponse(text));
+
+        if (Objects.equals(text, "up") || Objects.equals(text, "down") || Objects.equals(text, "next")){
+            SendMessage answer1 = new SendMessage();
+            answer1.setChatId(chatId);
+            answer1.setText(outputStrList.get(0));
+            outputObjList.add(answer1);
+
+            SendMessage answer2 = new SendMessage();
+            answer2.setChatId(chatId);
+            answer2.setText(outputStrList.get(1));
+            //answer2.setReplyMarkup(new ReplyKeyboardMarkup(initKeyboard(availableCommands).getKeyboard()));
+            ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(initKeyboard().getKeyboard());
+            keyboard.setResizeKeyboard(true); //подгоняем размер
+            keyboard.setOneTimeKeyboard(true); //скрываем после использования
+            answer2.setReplyMarkup(keyboard);
+
+            outputObjList.add(answer2);
+
+            return outputObjList;
         }
-        return ans;
+
+        SendMessage answer = new SendMessage();
+        answer.setChatId(chatId);
+        answer.setText(outputStrList.get(0));
+        //answer.setReplyMarkup(new ReplyKeyboardMarkup(initKeyboard(availableCommands).getKeyboard()));
+        ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(initKeyboard().getKeyboard());
+        keyboard.setResizeKeyboard(true); //подгоняем размер
+        keyboard.setOneTimeKeyboard(Objects.equals(text, "go")); //скрываем после использования
+        answer.setReplyMarkup(keyboard);
+
+        outputObjList.add(answer);
+        return outputObjList;
     }
 
     @Override
@@ -240,29 +231,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                 //Достаем из inMess id чата пользователя
                 String chatId = inMess.getChatId().toString();
                 //Получаем текст сообщения пользователя, отправляем в написанный нами обработчик
-                Map<String,ReplyKeyboardMarkup> ansMap = new HashMap<>(parseMessage(inMess.getText()));
-                //извлекаем текст для вывода
-                ArrayList<String> listkeyb = new ArrayList<>(ansMap.keySet());
-                int count = 0;
-                while(listkeyb.size()>0){
-                    if (count==1)
-                        Thread.sleep(5000);
-                    String response = listkeyb.get(0);
-                    //извлекаем клавиатуру
-                    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(ansMap.get(response).getKeyboard());
-                    //Создаем объект класса SendMessage - наш будущий ответ пользователю
-                    SendMessage answer = new SendMessage();
+                ArrayList<SendMessage> outputObjList = new ArrayList<>(objMessageList(inMess.getText(),chatId));
 
-                    //Добавляем в наше сообщение id чата, а также наш ответ
-                    answer.setChatId(chatId);
-                    answer.setText(response);
-                    answer.setReplyMarkup(replyKeyboardMarkup);
-
-                    //Отправка в чат
-                    execute(answer);
-                    //удаляем последний элемент
-                    listkeyb.remove(0);
-                    count++;
+                execute(outputObjList.get(0));
+                if (outputObjList.size()>1){
+                    Thread.sleep(5000);
+                    execute(outputObjList.get(1));
                 }
             }
         } catch (TelegramApiException e) {
