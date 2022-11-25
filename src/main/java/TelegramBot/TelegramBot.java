@@ -1,4 +1,4 @@
-package BotTraining.Telegram;
+package TelegramBot;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -33,9 +33,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try{
             if(update.hasMessage() && update.getMessage().hasText())
             {
-                //Извлекаем из объекта сообщение пользователя
                 Message inMess = update.getMessage();
-                //Достаем из inMess id чата пользователя
                 Long chatId = inMess.getChatId();
 
                 if (!users.containsKey(chatId)){
@@ -46,7 +44,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 User user = users.get(chatId);
                 user.setCommand(inMess.getText());
 
-                //Получаем текст сообщения пользователя, отправляем в написанный нами обработчик
                 ArrayList<SendMessage> outputObjList = new ArrayList<>(user.objMessageList(inMess.getText()));
 
                 execute(outputObjList.get(0));

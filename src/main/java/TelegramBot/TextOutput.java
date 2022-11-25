@@ -1,12 +1,11 @@
-package BotTraining.Telegram;
+package TelegramBot;
 
 import java.util.HashMap;
 import java.util.Map;
-
 public class TextOutput {
     private final Map<String, String> mapOutput = new HashMap<>();
 
-    TextOutput(){
+    public TextOutput(){
         mapOutput.put("start", """
                 Привет! Давай тренироваться!
                 Введи:
@@ -57,7 +56,7 @@ public class TextOutput {
         mapOutput.put("error", "Не понимаю( Введи команду правильно (без пробелов, с маленькой буквы, без скобок или кавычек)");
     }
 
-    protected String getText(String command) {
+    public String getText(String command) {
         return mapOutput.get(command);
     }
 }

@@ -1,4 +1,4 @@
-package BotTraining;
+package ConsoleBot;
 import java.util.Scanner;
 public class ReaderConsole implements Reader{
     public String read(){

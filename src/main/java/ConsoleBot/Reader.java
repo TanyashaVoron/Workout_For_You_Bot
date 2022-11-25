@@ -1,4 +1,4 @@
-package BotTraining;
+package ConsoleBot;
 interface Reader{
     String read();
 }

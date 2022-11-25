@@ -1,5 +1,6 @@
-package BotTraining;
+package TestConsoleBot;
 
+import ConsoleBot.Bot;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class BotTest {
+public class ConsoleBotTest {
     private void writeInFile(String text, String path) {
         try {
             File file = new File(path);

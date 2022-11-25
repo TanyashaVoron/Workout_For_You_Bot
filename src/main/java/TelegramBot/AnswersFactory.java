@@ -1,22 +1,20 @@
-package BotTraining.Telegram;
+package TelegramBot;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class AnswersFactory {
-
     protected TextOutput textOutput;
-
     //текущая команда, введенная данным пользователем
     protected String command;
-    //0 - down, 1 - up
-    private Boolean partOfBody;
     //массив комманд поступных далее пользователю
     protected ArrayList<String> availableCommands;
+    //0 - down, 1 - up
+    private Boolean partOfBody;
     //номер упражнения
     private Integer numberCommandEx;
 
-    protected AnswersFactory(){
+    public AnswersFactory(){
         textOutput = new TextOutput();
         command = "";
         availableCommands = new ArrayList<>();
@@ -24,11 +22,22 @@ public class AnswersFactory {
         numberCommandEx = -1;
     }
 
-    protected ArrayList<String> getResponse() {
+    public void setCommand(String com){
+        command = com;
+    }
+    public ArrayList<String> getAvailableCommands(){
+        return availableCommands;
+    }
+    public Boolean getPartOfBody(){
+        return partOfBody;
+    }
+    public Integer getNumberCommandEx(){
+        return numberCommandEx;
+    }
+    public ArrayList<String> getResponse() {
         ArrayList<String> outputStrList = new ArrayList<>();
 
-        if (!availableCommands.contains(command)){ // || outputStrList.get(0) == null){
-            //outputStrList.clear();
+        if (!availableCommands.contains(command)){
             outputStrList.add(textOutput.getText("error"));
             return outputStrList;
         }

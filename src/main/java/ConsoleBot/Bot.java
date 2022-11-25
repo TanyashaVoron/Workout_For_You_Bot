@@ -1,4 +1,4 @@
-package BotTraining;
+package ConsoleBot;
 import java.util.*;
 public class Bot {
     private String currentCommand;

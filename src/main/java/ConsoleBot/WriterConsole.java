@@ -1,4 +1,4 @@
-package BotTraining;
+package ConsoleBot;
 public class WriterConsole implements Writer  {
     public void hello() {
         System.out.println("""

@@ -1,4 +1,4 @@
-package BotTraining;
+package ConsoleBot;
 public interface Writer {
     void hello();
     void info();
