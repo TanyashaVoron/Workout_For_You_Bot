@@ -1,63 +1,104 @@
 package TestTelegramBot;
 
 import TelegramBot.AnswersFactory;
+import TelegramBot.Parsing;
 import TelegramBot.TextOutput;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 import java.util.*;
 
-public class TelegramBotTest {
+public class TelegramBotTest
+{
     private final String[] args = {
             "start", "info", "exit",
-            "start", "info", "go", "exit",
-            "start", "go", "up", "exit",
-            "start", "go", "up", "next", "exit",
-            "start", "go", "up", "next", "next", "exit",
-            "start", "go", "up", "next", "next", "next", "exit",
-            "start", "go", "up", "next", "next", "next", "next", "exit",
-            "start", "go", "up", "next", "next", "next", "next", "next", "done", "exit",
-            "start", "go", "up", "next", "next", "next", "next", "next", "done", "exit", "start", "info", "exit",
-            "start", "go", "up", "next", "next", "next", "next", "next", "done", "exit", "start", "go", "down", "exit",
-            "start", "go", "down", "next", "exit",
-            "start", "go", "down", "next", "next", "exit",
-            "start", "go", "down", "next", "next", "next", "exit",
-            "start", "go", "down", "next", "next", "next", "next", "exit",
-            "start", "go", "down", "next", "next", "next", "next", "next", "done", "exit",
-            "start", "go", "down", "next", "next", "next", "next", "next", "done", "info", "exit",
-            "start", "go", "down", "next", "next", "next", "next", "next", "done", "go", "exit",
+            "start", "info", "with me", "exit",
+            "start", "with me", "up", "exit",
+            "start", "with me", "up", "next", "exit",
+            "start", "with me", "up", "next", "next", "exit",
+            "start", "with me", "up", "next", "next", "next", "exit",
+            "start", "with me", "up", "next", "next", "next", "next", "exit",
+            "start", "with me", "up", "next", "next", "next", "next", "next", "done", "exit",
+            "start", "with me", "up", "next", "next", "next", "next", "next", "done", "exit", "start", "info", "exit",
+            "start", "with me", "up", "next", "next", "next", "next", "next", "done", "exit", "start", "with me", "down", "exit",
+            "start", "with me", "down", "next", "exit",
+            "start", "with me", "down", "next", "next", "exit",
+            "start", "with me", "down", "next", "next", "next", "exit",
+            "start", "with me", "down", "next", "next", "next", "next", "exit",
+            "start", "with me", "down", "next", "next", "next", "next", "next", "done", "exit",
+            "start", "with me", "down", "next", "next", "next", "next", "next", "done", "info", "exit",
+            "start", "with me", "down", "next", "next", "next", "next", "next", "done", "with me", "exit",
 
             "start", "asfg", "info", "asdfg", "exit", "sddy10",
-            "start", "gh", "info", "13l", "go", "13l", "exit",
-            "start", "asdfgh", "go", "sddy10", "up", "sddy10", "exit",
-            "start", "asfg", "go", "asdfg", "up", "asdfg", "next", "asfg", "exit",
-            "start", "gh", "go", "13l", "up", "13l", "next", "gh", "next", "asfg", "exit",
-            "start", "asdfgh", "go", "sddy10", "up", "sddy10", "next", "asdfgh", "next", "gh", "next", "asdfg", "exit",
-            "start", "asfg", "go", "asdfg", "up", "asdfg", "next", "asfg", "next", "asdfgh", "next", "13l", "next", "13l", "exit",
-            "start", "gh", "go", "13l", "up", "13l", "next", "gh", "next", "asfg", "next", "sddy10", "next", "sddy10", "next", "gh", "done", "skdhl", "exit",
-            "start", "asdfgh", "go", "sddy10", "up", "sddy10", "next", "asdfgh", "next", "gh", "next", "asdfg", "next", "asdfg", "next", "asdfgh", "done", "dsfgh", "exit", "skdhl", "start", "skdhl", "info", "skdhl", "exit",
-            "start", "asfg", "go", "asdfg", "up", "asdfg", "next", "asfg", "next", "asdfgh", "next", "13l", "next", "13l", "next", "asfg", "done", "dfgh", "exit", "dsfgh", "start", "dsfgh", "go", "dsfgh", "down", "asdfghl", "exit",
-            "start", "gh", "go", "13l", "down", "13l", "next", "gh", "exit",
-            "start", "asdfgh", "go", "sddy10", "down", "sddy10", "next", "asdfgh", "next", "gh", "exit",
-            "start", "asfg", "go", "asdfg", "down", "asdfg", "next", "asfg", "next", "asdfgh", "next", "asdfg", "exit",
-            "start", "gh", "go", "13l", "down", "13l", "next", "gh", "next", "asfg", "next", "13l", "next", "gh", "exit",
-            "start", "asdfgh", "go", "sddy10", "down", "sddy10", "next", "asdfgh", "next", "gh", "next", "sddy10", "next", "asdfgh", "next", "skdhl", "done", "skdhl", "exit",
-            "start", "asfg", "go", "asdfg", "down", "asdfg", "next", "asfg", "next", "asdfgh", "next", "asdfg", "next", "asfg", "next", "dsfgh", "done", "dsfgh", "info", "skdhl", "exit",
-            "start", "gh", "go", "13l", "down", "13l", "next", "gh", "next", "asfg", "next", "13l", "next", "gh", "next", "dfgh", "done", "dfgh", "go", "dsfgh", "exit",
+            "start", "gh", "info", "13l", "with me", "13l", "exit",
+            "start", "asdfgh", "with me", "sddy10", "up", "sddy10", "exit",
+            "start", "asfg", "with me", "asdfg", "up", "asdfg", "next", "asfg", "exit",
+            "start", "gh", "with me", "13l", "up", "13l", "next", "gh", "next", "asfg", "exit",
+            "start", "asdfgh", "with me", "sddy10", "up", "sddy10", "next", "asdfgh", "next", "gh", "next", "asdfg", "exit",
+            "start", "asfg", "with me", "asdfg", "up", "asdfg", "next", "asfg", "next", "asdfgh", "next", "13l", "next", "13l", "exit",
+            "start", "gh", "with me", "13l", "up", "13l", "next", "gh", "next", "asfg", "next", "sddy10", "next", "sddy10", "next", "gh", "done", "skdhl", "exit",
+            "start", "asdfgh", "with me", "sddy10", "up", "sddy10", "next", "asdfgh", "next", "gh", "next", "asdfg", "next", "asdfg", "next", "asdfgh", "done", "dsfgh", "exit", "skdhl", "start", "skdhl", "info", "skdhl", "exit",
+            "start", "asfg", "with me", "asdfg", "up", "asdfg", "next", "asfg", "next", "asdfgh", "next", "13l", "next", "13l", "next", "asfg", "done", "dfgh", "exit", "dsfgh", "start", "dsfgh", "with me", "dsfgh", "down", "asdfghl", "exit",
+            "start", "gh", "with me", "13l", "down", "13l", "next", "gh", "exit",
+            "start", "asdfgh", "with me", "sddy10", "down", "sddy10", "next", "asdfgh", "next", "gh", "exit",
+            "start", "asfg", "with me", "asdfg", "down", "asdfg", "next", "asfg", "next", "asdfgh", "next", "asdfg", "exit",
+            "start", "gh", "with me", "13l", "down", "13l", "next", "gh", "next", "asfg", "next", "13l", "next", "gh", "exit",
+            "start", "asdfgh", "with me", "sddy10", "down", "sddy10", "next", "asdfgh", "next", "gh", "next", "sddy10", "next", "asdfgh", "next", "skdhl", "done", "skdhl", "exit",
+            "start", "asfg", "with me", "asdfg", "down", "asdfg", "next", "asfg", "next", "asdfgh", "next", "asdfg", "next", "asfg", "next", "dsfgh", "done", "dsfgh", "info", "skdhl", "exit",
+            "start", "gh", "with me", "13l", "down", "13l", "next", "gh", "next", "asfg", "next", "13l", "next", "gh", "next", "dfgh", "done", "dfgh", "with me", "dsfgh", "exit",
+
+            "start",	"video",	"exit",
+            "start",	"video",	"home",	"exit",
+            "start",	"video",	"home",	"leg home",	"done",	"exit",
+            "start",	"video",	"home",	"butt home",	"done",	"exit",
+            "start",	"video",	"home",	"press",	"done",	"exit",
+            "start",	"video",	"home",	"arm home",	"done",	"exit",
+            "start",	"video",	"home",	"full body home",	"done",
+            "video",	"gym",	"exit",
+            "start",	"video",	"gym",	"leg gym",	"done",	"exit",
+            "start",	"video",	"gym",	"butt gym",	"done",	"exit",
+            "start",	"video",	"gym",	"press",	"done",	"exit",
+            "start",	"video",	"gym",	"arm gym",	"done",	"exit",
+            "start",	"video",	"gym",	"full body gym",	"done",	"exit",
+            "start",	"info",	"video",	"exit",
+
+            "start",	"asdfghj",	"video",	"12345",	"exit",
+            "start",	"werty",	"video",	"345",	"home",	"werty",	"exit",
+            "start",	"xcvbn",	"video",	"qw4567u",	"home",	"xcvbn",	"leg home",	"done",	"exit",
+            "start",	"aserty",	"video",	"12345",	"home",	"aserty",	"butt home",	"done",	"exit",
+            "start",	"asdfghj",	"video",	"345",	"home",	"asdfghj",	"press",	"done",	"exit",
+            "start",	"werty",	"video",	"qw4567u",	"home",	"werty",	"arm home",	"done",	"exit",
+            "start",	"xcvbn",	"video",	"12345",	"home",	"xcvbn",	"full body home",	"done",
+            "aserty",	"video",	"345",	"gym",	"aserty",	"exit",
+            "start",	"asdfghj",	"video",	"qw4567u",	"gym",	"asdfghj",	"leg gym",	"done",	"exit",
+            "start",	"werty",	"video",	"12345",	"gym",	"werty",	"butt gym",	"done",	"exit",
+            "start",	"xcvbn",	"video",	"345",	"gym",	"xcvbn",	"press",	"done",	"exit",
+            "start",	"aserty",	"video",	"qw4567u",	"gym",	"aserty",	"arm gym",	"done",	"exit",
+            "start",	"asdfghj",	"video",	"12345",	"gym",	"asdfghj",	"full body gym",	"done",	"exit",
+            "start",	"werty",	"info",	"bdf",	"video",	"werty",	"exit"
     };
     TextOutput textOutput = new TextOutput();
     private final HashMap<String,ArrayList<String>> availableCommandsMap = new HashMap<>();
     private final HashMap<String,String> outputStrMap = new HashMap<>();
+    private final Parsing parsing = new Parsing();
 
-    TelegramBotTest(){
-        availableCommandsMap.put("start",new ArrayList<>(Arrays.asList("info", "go")));
-        availableCommandsMap.put("info",new ArrayList<>(Arrays.asList("exit", "go")));
-        availableCommandsMap.put("go", new ArrayList<>(Arrays.asList("exit","down", "up")));
-        availableCommandsMap.put("done",new ArrayList<>(Arrays.asList("exit","info", "go")));
+    TelegramBotTest()
+    {
+        availableCommandsMap.put("start",new ArrayList<>(Arrays.asList("info", "video", "with me")));
+        availableCommandsMap.put("info",new ArrayList<>(Arrays.asList("exit", "video", "with me")));
+        availableCommandsMap.put("with me", new ArrayList<>(Arrays.asList("exit","down", "up")));
+        availableCommandsMap.put("done",new ArrayList<>(Arrays.asList("exit","info", "video", "with me")));
         availableCommandsMap.put("up",new ArrayList<>(List.of("exit","next")));
         availableCommandsMap.put("down",new ArrayList<>(List.of("exit","next")));
         availableCommandsMap.put("lastEx",new ArrayList<>(List.of("done")));
         availableCommandsMap.put("ex", new ArrayList<>(List.of("exit", "next")));
         availableCommandsMap.put("exit",new ArrayList<>(List.of("start")));
+        availableCommandsMap.put("video", new ArrayList<>(List.of("exit", "gym", "home")));
+        availableCommandsMap.put("home", new ArrayList<>(List.of("exit", "leg home", "butt home", "press", "arm home", "full body home")));
+        availableCommandsMap.put("gym", new ArrayList<>(List.of("exit", "leg gym", "butt gym", "press", "arm gym", "full body gym")));
+        availableCommandsMap.put("workoutVideo", new ArrayList<>(List.of("done")));
+
 
         outputStrMap.put("up0","1. Бабочка лежа на животе.");
         outputStrMap.put("up1","2. Поднятие корпуса лежа с согнутыми в коленях ногами.");
@@ -74,52 +115,52 @@ public class TelegramBotTest {
         outputStrMap.put("down5","6. Приведение бедра для внутренней части бедра.");
     }
 
-    private ArrayList<String> checkEqualsavailableCommands(String commandTest,Integer numberCommandEx) {
+    private ArrayList<String> checkEqualsavailableCommands(String commandTest,Integer numberCommandEx)
+    {
+        if (textOutput.getWorkoutVideo(commandTest)) return availableCommandsMap.get("workoutVideo");
+
         if(commandTest.equals("next"))
-            if (numberCommandEx == -1)
-                return availableCommandsMap.get("lastEx");
+            if (numberCommandEx == -1) return availableCommandsMap.get("lastEx");
             else return availableCommandsMap.get("ex");
 
-        if(commandTest.equals("up") || commandTest.equals("down"))
-            return availableCommandsMap.get("ex");
+        if(commandTest.equals("up") || commandTest.equals("down")) return availableCommandsMap.get("ex");
 
-        if(availableCommandsMap.containsKey(commandTest))
-            return availableCommandsMap.get(commandTest);
+        if(availableCommandsMap.containsKey(commandTest)) return availableCommandsMap.get(commandTest);
 
         return new ArrayList<>(List.of("*"));
     }
 
-    private ArrayList<String> checkOutputStrList(String commandTest, Boolean partOfBody,Integer numberCommandEx){
-        switch (commandTest){
-            case "up" -> {
-                return new ArrayList<>(Arrays.asList(outputStrMap.get("up0")+"\n"+textOutput.getText("time"), textOutput.getText("next")));
-            }
-            case "down" -> {
-                return new ArrayList<>(Arrays.asList(outputStrMap.get("down0")+"\n"+textOutput.getText("time"), textOutput.getText("next")));
-            }
-            case "next" ->{
+    private ArrayList<String> checkOutputStrList(String commandTest, Boolean partOfBody,Integer numberCommandEx) throws IOException {
+        switch (commandTest)
+        {
+            case "up" : return new ArrayList<>(Arrays.asList(outputStrMap.get("up0")+"\n"+textOutput.getText("time"), textOutput.getText("next")));
+
+            case "down" : return new ArrayList<>(Arrays.asList(outputStrMap.get("down0")+"\n"+textOutput.getText("time"), textOutput.getText("next")));
+
+            case "next" :
                 if (partOfBody)
-                    if (numberCommandEx == -1)
-                        return new ArrayList<>(List.of(textOutput.getText("lastEx") + "\n" + outputStrMap.get("up5")));
-                    else
-                        return new ArrayList<>(Arrays.asList(outputStrMap.get("up" + numberCommandEx)+"\n"+textOutput.getText("time"), textOutput.getText("next")));
+                    if (numberCommandEx == -1) return new ArrayList<>(List.of(textOutput.getText("lastEx") + "\n" + outputStrMap.get("up5")));
+                    else return new ArrayList<>(Arrays.asList(outputStrMap.get("up" + numberCommandEx)+"\n"+textOutput.getText("time"), textOutput.getText("next")));
                 else
-                    if (numberCommandEx == -1)
-                        return new ArrayList<>(List.of(textOutput.getText("lastEx") + "\n" + outputStrMap.get("down5")));
+                    if (numberCommandEx == -1) return new ArrayList<>(List.of(textOutput.getText("lastEx") + "\n" + outputStrMap.get("down5")));
                     else return new ArrayList<>(Arrays.asList(outputStrMap.get("down"+ numberCommandEx)+"\n"+textOutput.getText("time"), textOutput.getText("next")));
-            }
-            default -> {
-                if (availableCommandsMap.containsKey(commandTest))
-                    return new ArrayList<>(Collections.singletonList(textOutput.getText(commandTest)));
-                return new ArrayList<>(Collections.singletonList(textOutput.getText("error")));
+
+            default :
+            {
+                if (textOutput.getWorkoutVideo(commandTest)) return new ArrayList<>(Collections.singletonList(textOutput.getText("workoutVideo") + "\n" + parsing.getVideoLink(commandTest)));
+                else if (availableCommandsMap.containsKey(commandTest)) return new ArrayList<>(Collections.singletonList(textOutput.getText(commandTest)));
+                else return new ArrayList<>(Collections.singletonList(textOutput.getText("error")));
             }
         }
     }
 
     @Test
-    void Test(){
+    void Test() throws IOException
+    {
         AnswersFactory answersFactory = new AnswersFactory();
-        for (String arg : args){
+
+        for (String arg : args)
+        {
             answersFactory.setCommand(arg);
             ArrayList<String> outputStrList = new ArrayList<>(answersFactory.getResponse().stream().toList());
 
