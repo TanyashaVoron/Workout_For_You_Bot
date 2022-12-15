@@ -133,8 +133,10 @@ public class AnswersFactory
         else if(textOutput.getWorkoutVideo(command))
         {
             outputStrList.clear();
-            if (keyTest) outputStrList.add(textOutput.getText("workoutVideo"));
-            else outputStrList.add(textOutput.getText("workoutVideo") + "\n" + parsing.getVideoLink(command));
+            if (keyTest)
+                outputStrList.add(textOutput.getText("workoutVideo"));
+            else
+                outputStrList.add(textOutput.getText("workoutVideo") + "\n" + parsing.getVideoLink(command));
 
             availableCommands.add("done");
         }
