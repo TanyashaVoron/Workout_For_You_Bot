@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class AnswersFactory
 {
+    public boolean keyTest = false;
     protected TextOutput textOutput;
     //текущая команда, введенная данным пользователем
     protected String command;
@@ -60,15 +61,15 @@ public class AnswersFactory
             {
                 availableCommands.add("info");
                 availableCommands.add("video");
-                availableCommands.add("with me");
+                availableCommands.add("with you");
             }
             case "info" ->
             {
                 availableCommands.add("exit");
                 availableCommands.add("video");
-                availableCommands.add("with me");
+                availableCommands.add("with you");
             }
-            case "with me" ->
+            case "with you" ->
             {
                 availableCommands.add("exit");
                 availableCommands.add("down");
@@ -79,7 +80,7 @@ public class AnswersFactory
                 availableCommands.add("exit");
                 availableCommands.add("info");
                 availableCommands.add("video");
-                availableCommands.add("with me");
+                availableCommands.add("with you");
             }
             case "exit" ->
             {
@@ -132,7 +133,9 @@ public class AnswersFactory
         else if(textOutput.getWorkoutVideo(command))
         {
             outputStrList.clear();
-            outputStrList.add(textOutput.getText("workoutVideo") + "\n" + parsing.getVideoLink(command));
+            if (keyTest) outputStrList.add(textOutput.getText("workoutVideo"));
+            else outputStrList.add(textOutput.getText("workoutVideo") + "\n" + parsing.getVideoLink(command));
+
             availableCommands.add("done");
         }
         return outputStrList;

@@ -1,7 +1,6 @@
 package TestTelegramBot;
 
 import TelegramBot.AnswersFactory;
-import TelegramBot.Parsing;
 import TelegramBot.TextOutput;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,40 +12,40 @@ public class TelegramBotTest
 {
     private final String[] args = {
             "start", "info", "exit",
-            "start", "info", "with me", "exit",
-            "start", "with me", "up", "exit",
-            "start", "with me", "up", "next", "exit",
-            "start", "with me", "up", "next", "next", "exit",
-            "start", "with me", "up", "next", "next", "next", "exit",
-            "start", "with me", "up", "next", "next", "next", "next", "exit",
-            "start", "with me", "up", "next", "next", "next", "next", "next", "done", "exit",
-            "start", "with me", "up", "next", "next", "next", "next", "next", "done", "exit", "start", "info", "exit",
-            "start", "with me", "up", "next", "next", "next", "next", "next", "done", "exit", "start", "with me", "down", "exit",
-            "start", "with me", "down", "next", "exit",
-            "start", "with me", "down", "next", "next", "exit",
-            "start", "with me", "down", "next", "next", "next", "exit",
-            "start", "with me", "down", "next", "next", "next", "next", "exit",
-            "start", "with me", "down", "next", "next", "next", "next", "next", "done", "exit",
-            "start", "with me", "down", "next", "next", "next", "next", "next", "done", "info", "exit",
-            "start", "with me", "down", "next", "next", "next", "next", "next", "done", "with me", "exit",
+            "start", "info", "with you", "exit",
+            "start", "with you", "up", "exit",
+            "start", "with you", "up", "next", "exit",
+            "start", "with you", "up", "next", "next", "exit",
+            "start", "with you", "up", "next", "next", "next", "exit",
+            "start", "with you", "up", "next", "next", "next", "next", "exit",
+            "start", "with you", "up", "next", "next", "next", "next", "next", "done", "exit",
+            "start", "with you", "up", "next", "next", "next", "next", "next", "done", "exit", "start", "info", "exit",
+            "start", "with you", "up", "next", "next", "next", "next", "next", "done", "exit", "start", "with you", "down", "exit",
+            "start", "with you", "down", "next", "exit",
+            "start", "with you", "down", "next", "next", "exit",
+            "start", "with you", "down", "next", "next", "next", "exit",
+            "start", "with you", "down", "next", "next", "next", "next", "exit",
+            "start", "with you", "down", "next", "next", "next", "next", "next", "done", "exit",
+            "start", "with you", "down", "next", "next", "next", "next", "next", "done", "info", "exit",
+            "start", "with you", "down", "next", "next", "next", "next", "next", "done", "with you", "exit",
 
             "start", "asfg", "info", "asdfg", "exit", "sddy10",
-            "start", "gh", "info", "13l", "with me", "13l", "exit",
-            "start", "asdfgh", "with me", "sddy10", "up", "sddy10", "exit",
-            "start", "asfg", "with me", "asdfg", "up", "asdfg", "next", "asfg", "exit",
-            "start", "gh", "with me", "13l", "up", "13l", "next", "gh", "next", "asfg", "exit",
-            "start", "asdfgh", "with me", "sddy10", "up", "sddy10", "next", "asdfgh", "next", "gh", "next", "asdfg", "exit",
-            "start", "asfg", "with me", "asdfg", "up", "asdfg", "next", "asfg", "next", "asdfgh", "next", "13l", "next", "13l", "exit",
-            "start", "gh", "with me", "13l", "up", "13l", "next", "gh", "next", "asfg", "next", "sddy10", "next", "sddy10", "next", "gh", "done", "skdhl", "exit",
-            "start", "asdfgh", "with me", "sddy10", "up", "sddy10", "next", "asdfgh", "next", "gh", "next", "asdfg", "next", "asdfg", "next", "asdfgh", "done", "dsfgh", "exit", "skdhl", "start", "skdhl", "info", "skdhl", "exit",
-            "start", "asfg", "with me", "asdfg", "up", "asdfg", "next", "asfg", "next", "asdfgh", "next", "13l", "next", "13l", "next", "asfg", "done", "dfgh", "exit", "dsfgh", "start", "dsfgh", "with me", "dsfgh", "down", "asdfghl", "exit",
-            "start", "gh", "with me", "13l", "down", "13l", "next", "gh", "exit",
-            "start", "asdfgh", "with me", "sddy10", "down", "sddy10", "next", "asdfgh", "next", "gh", "exit",
-            "start", "asfg", "with me", "asdfg", "down", "asdfg", "next", "asfg", "next", "asdfgh", "next", "asdfg", "exit",
-            "start", "gh", "with me", "13l", "down", "13l", "next", "gh", "next", "asfg", "next", "13l", "next", "gh", "exit",
-            "start", "asdfgh", "with me", "sddy10", "down", "sddy10", "next", "asdfgh", "next", "gh", "next", "sddy10", "next", "asdfgh", "next", "skdhl", "done", "skdhl", "exit",
-            "start", "asfg", "with me", "asdfg", "down", "asdfg", "next", "asfg", "next", "asdfgh", "next", "asdfg", "next", "asfg", "next", "dsfgh", "done", "dsfgh", "info", "skdhl", "exit",
-            "start", "gh", "with me", "13l", "down", "13l", "next", "gh", "next", "asfg", "next", "13l", "next", "gh", "next", "dfgh", "done", "dfgh", "with me", "dsfgh", "exit",
+            "start", "gh", "info", "13l", "with you", "13l", "exit",
+            "start", "asdfgh", "with you", "sddy10", "up", "sddy10", "exit",
+            "start", "asfg", "with you", "asdfg", "up", "asdfg", "next", "asfg", "exit",
+            "start", "gh", "with you", "13l", "up", "13l", "next", "gh", "next", "asfg", "exit",
+            "start", "asdfgh", "with you", "sddy10", "up", "sddy10", "next", "asdfgh", "next", "gh", "next", "asdfg", "exit",
+            "start", "asfg", "with you", "asdfg", "up", "asdfg", "next", "asfg", "next", "asdfgh", "next", "13l", "next", "13l", "exit",
+            "start", "gh", "with you", "13l", "up", "13l", "next", "gh", "next", "asfg", "next", "sddy10", "next", "sddy10", "next", "gh", "done", "skdhl", "exit",
+            "start", "asdfgh", "with you", "sddy10", "up", "sddy10", "next", "asdfgh", "next", "gh", "next", "asdfg", "next", "asdfg", "next", "asdfgh", "done", "dsfgh", "exit", "skdhl", "start", "skdhl", "info", "skdhl", "exit",
+            "start", "asfg", "with you", "asdfg", "up", "asdfg", "next", "asfg", "next", "asdfgh", "next", "13l", "next", "13l", "next", "asfg", "done", "dfgh", "exit", "dsfgh", "start", "dsfgh", "with you", "dsfgh", "down", "asdfghl", "exit",
+            "start", "gh", "with you", "13l", "down", "13l", "next", "gh", "exit",
+            "start", "asdfgh", "with you", "sddy10", "down", "sddy10", "next", "asdfgh", "next", "gh", "exit",
+            "start", "asfg", "with you", "asdfg", "down", "asdfg", "next", "asfg", "next", "asdfgh", "next", "asdfg", "exit",
+            "start", "gh", "with you", "13l", "down", "13l", "next", "gh", "next", "asfg", "next", "13l", "next", "gh", "exit",
+            "start", "asdfgh", "with you", "sddy10", "down", "sddy10", "next", "asdfgh", "next", "gh", "next", "sddy10", "next", "asdfgh", "next", "skdhl", "done", "skdhl", "exit",
+            "start", "asfg", "with you", "asdfg", "down", "asdfg", "next", "asfg", "next", "asdfgh", "next", "asdfg", "next", "asfg", "next", "dsfgh", "done", "dsfgh", "info", "skdhl", "exit",
+            "start", "gh", "with you", "13l", "down", "13l", "next", "gh", "next", "asfg", "next", "13l", "next", "gh", "next", "dfgh", "done", "dfgh", "with you", "dsfgh", "exit",
 
             "start",	"video",	"exit",
             "start",	"video",	"home",	"exit",
@@ -81,14 +80,13 @@ public class TelegramBotTest
     TextOutput textOutput = new TextOutput();
     private final HashMap<String,ArrayList<String>> availableCommandsMap = new HashMap<>();
     private final HashMap<String,String> outputStrMap = new HashMap<>();
-    private final Parsing parsing = new Parsing();
 
     TelegramBotTest()
     {
-        availableCommandsMap.put("start",new ArrayList<>(Arrays.asList("info", "video", "with me")));
-        availableCommandsMap.put("info",new ArrayList<>(Arrays.asList("exit", "video", "with me")));
-        availableCommandsMap.put("with me", new ArrayList<>(Arrays.asList("exit","down", "up")));
-        availableCommandsMap.put("done",new ArrayList<>(Arrays.asList("exit","info", "video", "with me")));
+        availableCommandsMap.put("start",new ArrayList<>(Arrays.asList("info", "video", "with you")));
+        availableCommandsMap.put("info",new ArrayList<>(Arrays.asList("exit", "video", "with you")));
+        availableCommandsMap.put("with you", new ArrayList<>(Arrays.asList("exit","down", "up")));
+        availableCommandsMap.put("done",new ArrayList<>(Arrays.asList("exit","info", "video", "with you")));
         availableCommandsMap.put("up",new ArrayList<>(List.of("exit","next")));
         availableCommandsMap.put("down",new ArrayList<>(List.of("exit","next")));
         availableCommandsMap.put("lastEx",new ArrayList<>(List.of("done")));
@@ -130,7 +128,7 @@ public class TelegramBotTest
         return new ArrayList<>(List.of("*"));
     }
 
-    private ArrayList<String> checkOutputStrList(String commandTest, Boolean partOfBody,Integer numberCommandEx) throws IOException {
+    private ArrayList<String> checkOutputStrList(String commandTest, Boolean partOfBody,Integer numberCommandEx) {
         switch (commandTest)
         {
             case "up" : return new ArrayList<>(Arrays.asList(outputStrMap.get("up0")+"\n"+textOutput.getText("time"), textOutput.getText("next")));
@@ -147,7 +145,7 @@ public class TelegramBotTest
 
             default :
             {
-                if (textOutput.getWorkoutVideo(commandTest)) return new ArrayList<>(Collections.singletonList(textOutput.getText("workoutVideo") + "\n" + parsing.getVideoLink(commandTest)));
+                if (textOutput.getWorkoutVideo(commandTest)) return new ArrayList<>(Collections.singletonList(textOutput.getText("workoutVideo")));
                 else if (availableCommandsMap.containsKey(commandTest)) return new ArrayList<>(Collections.singletonList(textOutput.getText(commandTest)));
                 else return new ArrayList<>(Collections.singletonList(textOutput.getText("error")));
             }
@@ -155,9 +153,10 @@ public class TelegramBotTest
     }
 
     @Test
-    void Test() throws IOException
+    void test() throws IOException
     {
         AnswersFactory answersFactory = new AnswersFactory();
+        answersFactory.keyTest = true;
 
         for (String arg : args)
         {
@@ -167,6 +166,7 @@ public class TelegramBotTest
             //проверка на совпадение availableCommands - доступные далее команды
             if (!Objects.equals(checkEqualsavailableCommands(arg, answersFactory.getNumberCommandEx()), new ArrayList<>(List.of("*"))))
                Assertions.assertEquals(checkEqualsavailableCommands(arg,answersFactory.getNumberCommandEx()),answersFactory.getAvailableCommands());
+
             //проверка на совпадения outputStrList - строки для вывода
             Assertions.assertEquals(checkOutputStrList(arg,answersFactory.getPartOfBody(),answersFactory.getNumberCommandEx()),outputStrList);
         }

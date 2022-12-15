@@ -53,7 +53,7 @@ public class User
             return outputObjList;
         }
 
-        objMessage(outputStrList.get(0),true,Objects.equals(text, "with me"));
+        objMessage(outputStrList.get(0),true,Objects.equals(text, "with you"));
         outputObjList.add(message2);
 
         return outputObjList;
