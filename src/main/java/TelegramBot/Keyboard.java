@@ -13,7 +13,7 @@ public class Keyboard
 
     Keyboard() { keyboard = new ReplyKeyboardMarkup(); }
 
-    void initKeyboard(Boolean oneTime, ArrayList<String> availableCommands)
+    void initKeyboardWorkout(Boolean oneTime, ArrayList<String> availableCommands)
     {
         ArrayList<String> listCommands = new ArrayList<>(availableCommands.stream().toList());
         List<KeyboardRow> keyboardRows = new ArrayList<>();

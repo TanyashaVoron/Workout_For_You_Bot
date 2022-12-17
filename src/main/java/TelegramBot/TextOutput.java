@@ -59,7 +59,7 @@ public class TextOutput
                 (exit) если хочешь прервать тренеровку и выйти""");
         mapOutput.put("time","У тебя 60 секунд!");
         mapOutput.put("exit", "Пока! Возвращайся:)");
-        mapOutput.put("error", "Не понимаю( Введи команду правильно (без пробелов, с маленькой буквы, без скобок или кавычек)");
+        mapOutput.put("error", "Ошибка ввода");
         mapOutput.put("video", """
                 Где будем тренироваться?
                 (home) - дома
@@ -109,6 +109,20 @@ public class TextOutput
         workoutVideo.add("butt gym");
         workoutVideo.add("leg home");
         workoutVideo.add("leg gym");
+
+        mapOutput.put("ship0", "Бот уже расставил корабли, теперь твоя очередь!\nПервый корабль 4-х палубный");
+        mapOutput.put("inputRule","Введи две цифры от 0 до 9 без пробелов (координата по ох, потом по оу");
+        mapOutput.put("vector","Молодец! выбери направление корабля, введи: \n 0 - по вертикали вниз \n 1 - по горизонтали в право");
+        mapOutput.put("ship1","Круто! Следующий корабль 3-х палубный \nУчти, что нельзя ставить корабли рядом!");
+        mapOutput.put("ship2","Выбери место для еще одного 3-х палубного корабля");
+        mapOutput.put("ship3","Теперь 2-х палубные. Их всего будет три. Давай поставим первый!");
+        mapOutput.put("ship4","Второй 2-х палубный");
+        mapOutput.put("ship5","Последний 2-х палубный");
+        mapOutput.put("ship6","Ууу еще целых 4 одиночных корабля осталось. первый!");
+        mapOutput.put("ship7","Второй");
+        mapOutput.put("ship8","Третий");
+        mapOutput.put("ship9","Ииии Последний корабль!");
+
     }
 
     public String getText(String command) { return mapOutput.get(command); }

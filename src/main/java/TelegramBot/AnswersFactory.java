@@ -1,12 +1,13 @@
 package TelegramBot;
 
+import TelegramBot.Game.Logics;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class AnswersFactory
 {
-    public boolean keyTest = false;
     protected TextOutput textOutput;
     //текущая команда, введенная данным пользователем
     protected String command;
@@ -16,7 +17,8 @@ public class AnswersFactory
     private Boolean partOfBody;
     private Integer numberCommandEx;
     private final Parsing parsing;
-
+    public boolean keyTest = false;
+    protected Logics game;
     public AnswersFactory()
     {
         textOutput = new TextOutput();
@@ -25,6 +27,7 @@ public class AnswersFactory
         availableCommands.add("start");
         numberCommandEx = -1;
         parsing = new Parsing();
+        game = new Logics();
     }
 
     public void setCommand(String com) { command = com; }
@@ -62,12 +65,14 @@ public class AnswersFactory
                 availableCommands.add("info");
                 availableCommands.add("video");
                 availableCommands.add("with you");
+                availableCommands.add("game");
             }
             case "info" ->
             {
                 availableCommands.add("exit");
                 availableCommands.add("video");
                 availableCommands.add("with you");
+                availableCommands.add("game");
             }
             case "with you" ->
             {
@@ -81,6 +86,7 @@ public class AnswersFactory
                 availableCommands.add("info");
                 availableCommands.add("video");
                 availableCommands.add("with you");
+                availableCommands.add("game");
             }
             case "exit" ->
             {
@@ -139,6 +145,21 @@ public class AnswersFactory
                 outputStrList.add(textOutput.getText("workoutVideo") + "\n" + parsing.getVideoLink(command));
 
             availableCommands.add("done");
+        }
+        else if(command.equals("game") || game.getFlagGame())
+        {
+            game.setFlagGame();
+            game.setPlayerTurn(command);
+            //game.logicsGame();
+            outputStrList.add(game.getInputText());
+
+            ArrayList<String> availableCommandGame = new ArrayList<>(game.availableCommandGame);
+
+            while(availableCommandGame.size()>0)
+            {
+                availableCommands.add(availableCommandGame.get(0));
+                availableCommandGame.remove(0);
+            }
         }
         return outputStrList;
     }
