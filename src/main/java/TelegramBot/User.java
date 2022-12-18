@@ -46,7 +46,7 @@ public class User
 
         if (Objects.equals(answersFactory.command, "game") || answersFactory.game.getFlagGame()){
             objMessageWorkout(outputStrList.get(0),false,true);
-            outputObjList.add(message2);
+            outputObjList.add(message1);
             return outputObjList;
         }
         else if (outputStrList.size() > 1)

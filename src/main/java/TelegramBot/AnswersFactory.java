@@ -1,6 +1,7 @@
 package TelegramBot;
 
-import TelegramBot.Game.Logics;
+import TelegramBot.Game.Game;
+import TelegramBot.Game.PlayerBot;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class AnswersFactory
     private Integer numberCommandEx;
     private final Parsing parsing;
     public boolean keyTest = false;
-    protected Logics game;
+    protected Game game;
     public AnswersFactory()
     {
         textOutput = new TextOutput();
@@ -27,7 +28,7 @@ public class AnswersFactory
         availableCommands.add("start");
         numberCommandEx = -1;
         parsing = new Parsing();
-        game = new Logics();
+        game = new Game();
     }
 
     public void setCommand(String com) { command = com; }
@@ -41,6 +42,8 @@ public class AnswersFactory
     public ArrayList<String> getResponse() throws IOException
     {
         ArrayList<String> outputStrList = new ArrayList<>();
+
+        System.out.println(availableCommands);
 
         if (!availableCommands.contains(command))
         {
@@ -62,6 +65,8 @@ public class AnswersFactory
         {
             case "start" ->
             {
+                //PlayerBot playerBot=new PlayerBot();
+                //playerBot.placesShips();
                 availableCommands.add("info");
                 availableCommands.add("video");
                 availableCommands.add("with you");
@@ -148,18 +153,24 @@ public class AnswersFactory
         }
         else if(command.equals("game") || game.getFlagGame())
         {
+            outputStrList.clear();
             game.setFlagGame();
             game.setPlayerTurn(command);
-            //game.logicsGame();
-            outputStrList.add(game.getInputText());
+            String a=game.logics();
+            System.out.println(a);
+            outputStrList.add(a);
 
-            ArrayList<String> availableCommandGame = new ArrayList<>(game.availableCommandGame);
+            ArrayList<String> availableCommandGame = new ArrayList<>(game.player.availableCommands);
 
             while(availableCommandGame.size()>0)
             {
                 availableCommands.add(availableCommandGame.get(0));
                 availableCommandGame.remove(0);
             }
+        }
+        else if (command.equals("погнали"))
+        {
+
         }
         return outputStrList;
     }

@@ -11,9 +11,13 @@ public class Logics {
     private String inputText;
 
     private String[][] player = new String[10][10];
-    public ArrayList<String> availableCommandGame = new ArrayList<>();
+    public ArrayList<String> availableCommandPlayer = new ArrayList<>();
     private Integer shipNumber;
     private Boolean vectorShip = false;
+
+    private Integer firstCoor;
+    private Integer secondCoor;
+
 
 
     private boolean flagStartGame;
@@ -39,16 +43,16 @@ public class Logics {
         //convertTurn = new ConvertTurn();
 
         first = new HashMap<>();
-        first.put("A", 0);
-        first.put("B", 1);
-        first.put("C", 2);
-        first.put("D", 3);
-        first.put("E", 4);
-        first.put("F", 5);
-        first.put("G", 6);
-        first.put("H", 7);
-        first.put("I", 8);
-        first.put("K", 9);
+        first.put("0", 0);
+        first.put("1", 1);
+        first.put("2", 2);
+        first.put("3", 3);
+        first.put("4", 4);
+        first.put("5", 5);
+        first.put("6", 6);
+        first.put("7", 7);
+        first.put("8", 8);
+        first.put("9", 9);
 
         for(int i=0;i<10;i++)
             for(int j=0;j<10;j++){
@@ -96,68 +100,23 @@ public class Logics {
     //
 
     //обьединяем их в общий метод, который, если ключ начала расстановки кораблей активен, то
-    // в зависимости от номера корабля, вызывает методы ниже и заполняет текстовую строку
+    //в зависимости от номера корабля, вызывает методы ниже и заполняет текстовую строку
     //которая потом передается в сообщение в телеграм пользователю
     //когда расставлены все корабли (номер кораблей равен 10) дизактивируем ключ начала расстановки кораблей
     //начинается генерация поля бота.
-    // она происходит аналогично полю игрока, но ход и направление выбирается рандомно
-    // число от 0 до 100. далее берется остаток по модулю 10 (если выбираем корабль) 2(если выбираем направление)
+    //она происходит аналогично полю игрока, но ход и направление выбирается рандомно
+    //число от 0 до 100. далее берется остаток по модулю 10 (если выбираем корабль) 2(если выбираем направление)
     //далее начинается игра....
 
 
 
     //аналогично прописываем методы для остальных кораблей
 
-    private String ship1()
-    {
-        String text = textOutput.getText("ship0")+textOutput.getText("inputRule");
-        if(Objects.equals(playerTurn, "0")){
-        //условия если корабль в право или вниз, ошибка, если не влазит в поле
-            // заполняем * корабль, поля вокруг корабля #
-            //заполняем avar... всеми номерами полей, которые доступны дальше, то есть всеми (_)
-        }
-        return text;
-    }
 
-    private String ship0()
+    
+    public String logics()
     {
-        updateAvailableCommandGame();
-        vectorShip = true;
-        return textOutput.getText("ship0")+textOutput.getText("inputRule")+fieldOutput(player);
-    }
-
-    private String vector()
-    {
-        int firstCoor = first.get(playerTurn.charAt(0));
-        int secondCoor = first.get(playerTurn.charAt(1));
-        player[firstCoor][secondCoor] = "*";
-        String text = fieldOutput(player)+textOutput.getText("vector");
-        availableCommandGame.clear();
-        availableCommandGame.add("0");
-        availableCommandGame.add("1");
-        shipNumber++;
-        return text;
-    }
-
-    private void updateAvailableCommandGame(){
-        availableCommandGame.clear();
-        for(int i=0;i<10;i++)
-            for(int j=0;j<10;j++)
-                if(Objects.equals(player[i][j], "_"))
-                    availableCommandGame.add(i+""+j+"");
-    }
-
-    private String fieldOutput(String[][] fieldInput)
-    {
-        String text = "  0 1 2 3 4 5 6 7 8 9\n";
-        for(int i=0;i<10;i++)
-        {
-            text += i+"";
-            for(int j=0;j<10;j++)
-                text += fieldInput[i][j]+"";
-            text += "\n";
-        }
-        return text;
+        return "0";
     }
 
 }
