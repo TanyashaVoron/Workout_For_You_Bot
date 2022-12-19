@@ -1,7 +1,6 @@
 package TelegramBot;
 
 import TelegramBot.Game.Game;
-import TelegramBot.Game.PlayerBot;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,8 +64,6 @@ public class AnswersFactory
         {
             case "start" ->
             {
-                //PlayerBot playerBot=new PlayerBot();
-                //playerBot.placesShips();
                 availableCommands.add("info");
                 availableCommands.add("video");
                 availableCommands.add("with you");
@@ -153,6 +150,7 @@ public class AnswersFactory
         }
         else if(command.equals("game") || game.getFlagGame())
         {
+            System.out.println(availableCommands);
             outputStrList.clear();
             game.setFlagGame();
             game.setPlayerTurn(command);
@@ -167,10 +165,6 @@ public class AnswersFactory
                 availableCommands.add(availableCommandGame.get(0));
                 availableCommandGame.remove(0);
             }
-        }
-        else if (command.equals("погнали"))
-        {
-
         }
         return outputStrList;
     }

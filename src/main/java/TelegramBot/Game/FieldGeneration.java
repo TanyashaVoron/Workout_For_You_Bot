@@ -4,8 +4,9 @@ import TelegramBot.TextOutput;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Player {
+public class FieldGeneration {
     public String turn;
+    public String text="";
     public String[][] field = new String[10][10];
     public ArrayList<String> availableCommands = new ArrayList<>();
     public Integer shipNumber;
@@ -19,7 +20,7 @@ public class Player {
     TextOutput textOutput;
     ConvertTurn convertTurn;
 
-    Player() {
+    FieldGeneration() {
         shipNumber = 0;
         vectorShip = false;
         flagPlayerPlacesShips = true;
@@ -32,28 +33,38 @@ public class Player {
                 field[i][j] = "_";
     }
 
-    private String vectorShips()
+    public String getAvailableCommands() { return placesShips.convertFieldToString(field); }
+
+    private void vectorShips()
     {
         vectorShip = false;
         shipNumber++;
-        return placesShips.vector(field, availableCommands, convertTurn.getfirstCoor(),convertTurn.getSecondCoor())+textOutput.getText("vector");
+        text = placesShips.vector(field, availableCommands, convertTurn.getfirstCoor(),convertTurn.getSecondCoor())+textOutput.getText("vector");
     }
 
-    private String ship1()
+    private void shipEnd()
     {
-        String text = textOutput.getText("ship"+shipNumber.toString());
+        field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "x";
+        placesShips.fillingFieldsAroundTheShip(convertTurn.getfirstCoor(),convertTurn.getSecondCoor(),field);
+        placesShips.updateavailableCommand(field,availableCommands);
+        shipNumber++;
+    }
+
+    private void ship1()
+    {
+        text += textOutput.getText("ship"+shipNumber.toString());
         text += textOutput.getText("inputRule");
         field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "x";
+        placesShips.fillingFieldsAroundTheShip(convertTurn.getfirstCoor(),convertTurn.getSecondCoor(),field);
         placesShips.updateavailableCommand(field,availableCommands);
         text += placesShips.convertFieldToString(field);
         shipNumber++;
-        return text;
     }
 
-    private String ship234()
+    private void ship234()
     {
-        String text = textOutput.getText("ship"+shipNumber.toString());
-        text+= textOutput.getText("inputRule");
+        text += textOutput.getText("ship"+shipNumber.toString());
+        text += textOutput.getText("inputRule");
 
         int size;
         if(shipNumber == 1) size=4;
@@ -67,50 +78,71 @@ public class Player {
         {
             shipNumber--;
             field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "_";
-            return textOutput.getText(error) + "\n";
+            text = textOutput.getText(error) + "\n";
+            return;
         }
 
         placesShips.updateavailableCommand(field,availableCommands);
         text += placesShips.convertFieldToString(field);
         if(shipNumber == 6) shipNumber++;
         else vectorShip = true;
-        return text;
     }
 
-    private String ship0()
+    private void ship0()
     {
         placesShips.updateavailableCommand(field, availableCommands);
         vectorShip = true;
-        return textOutput.getText("ship0")+textOutput.getText("inputRule")+placesShips.convertFieldToString(field);
+        text = textOutput.getText("ship0")+textOutput.getText("inputRule")+placesShips.convertFieldToString(field);
     }
-    protected String placesShips() {
-        String text = "";
+    protected void placesShips()
+    {
+        text = "";
 
         if (turn.length() == 2)
             convertTurn.convert(turn);
 
-        if (vectorShip) return vectorShips();
-        else {
-            if (shipNumber == 0) return ship0();
+        if (vectorShip)
+        {
+            vectorShips();
+            return;
+        }
+        else
+        {
+            if (shipNumber == 0)
+            {
+               ship0();
+               return;
+            }
 
-            if (shipNumber == 1) return ship234();
+            if (shipNumber == 1)
+            {
+                ship234();
+                return;
+            }
 
-            if (shipNumber >= 2 && shipNumber <= 6) {
-                text = ship234();
-                if (!Objects.equals(error, "*")) {
+            if (shipNumber >= 2 && shipNumber <= 6)
+            {
+                ship234();
+                if (!Objects.equals(error, "*"))
+                {
                     error = "*";
-                    return text + ship234();
+                    ship234();
+                    return;
                 }
-                return text;
+                return;
             }
         }
 
-        if (shipNumber >= 7 && shipNumber <= 10)
-            return ship1();
+        if (shipNumber >= 7 && shipNumber <= 9)
+        {
+            ship1();
+            return;
+        }
 
-
-        flagPlayerPlacesShips = false;
-        availableCommands.add("погнали");
-        return "Начинаем играть!";
+        if (shipNumber == 10)
+        {
+            shipEnd();
+            flagPlayerPlacesShips = false;
+        }
     }
 }
