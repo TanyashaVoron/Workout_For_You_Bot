@@ -15,4 +15,7 @@ public class RandomGeneratorTurn
 
         return availableCommands.get(((int) ( Math.random() * size )));
     }
+
+    public String randomGeneratorTurnGame(ArrayList<String> availableCommands)
+    { return availableCommands.get(((int) ( Math.random() * availableCommands.size() ))); }
 }

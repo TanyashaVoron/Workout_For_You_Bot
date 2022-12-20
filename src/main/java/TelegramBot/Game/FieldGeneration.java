@@ -4,23 +4,26 @@ import TelegramBot.TextOutput;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class FieldGeneration {
+public class FieldGeneration
+{
     public String turn;
-    public String text="";
-    public String[][] field = new String[10][10];
-    public ArrayList<String> availableCommands = new ArrayList<>();
-    public Integer shipNumber;
-    public Boolean vectorShip;
-
-    private String error;
-
-    public Boolean flagPlayerPlacesShips;
-
-    PlacesShips placesShips;
+    public String text;
+    public String[][] field;
+    public ArrayList<String> availableCommands;
     TextOutput textOutput;
     ConvertTurn convertTurn;
 
-    FieldGeneration() {
+    public Integer shipNumber;
+    public Boolean vectorShip;
+    private String error;
+    public Boolean flagPlayerPlacesShips;
+    PlacesShips placesShips;
+
+    FieldGeneration()
+    {
+        text = "";
+        field = new String[10][10];
+        availableCommands = new ArrayList<>();
         shipNumber = 0;
         vectorShip = false;
         flagPlayerPlacesShips = true;
@@ -32,8 +35,6 @@ public class FieldGeneration {
             for(int j=0;j<10;j++)
                 field[i][j] = "_";
     }
-
-    public String getAvailableCommands() { return placesShips.convertFieldToString(field); }
 
     private void vectorShips()
     {
@@ -110,8 +111,8 @@ public class FieldGeneration {
         {
             if (shipNumber == 0)
             {
-               ship0();
-               return;
+                ship0();
+                return;
             }
 
             if (shipNumber == 1)

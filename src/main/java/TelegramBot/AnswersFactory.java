@@ -95,6 +95,7 @@ public class AnswersFactory
                 availableCommands.add("start");
                 command = "";
                 numberCommandEx = -1;
+                game.clear();
             }
             case "video" ->
             {
@@ -153,18 +154,16 @@ public class AnswersFactory
             System.out.println(availableCommands);
             outputStrList.clear();
             game.setFlagGame();
-            game.setPlayerTurn(command);
-            String a=game.logics();
-            System.out.println(a);
+            String a=game.logics(command);
             outputStrList.add(a);
 
-            ArrayList<String> availableCommandGame = new ArrayList<>(game.player.availableCommands);
+            if(game.fieldGenerationPlayer.flagPlayerPlacesShips)
+                availableCommands.addAll(game.fieldGenerationPlayer.availableCommands);
 
-            while(availableCommandGame.size()>0)
-            {
-                availableCommands.add(availableCommandGame.get(0));
-                availableCommandGame.remove(0);
-            }
+            if(game.processingTurnPlayer.flagStartGame)
+                availableCommands.addAll(game.processingTurnPlayer.availableCommands);
+
+            availableCommands.add("exit");
         }
         return outputStrList;
     }

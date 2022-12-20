@@ -127,6 +127,11 @@ public class TextOutput
         mapOutput.put("ship9","Ииии Последний корабль!\n");
         mapOutput.put("shipError","ой, здесь нельзя ставить корабль. давай попробуем снова!\n");
         mapOutput.put("goingOutOfBounds","упс, корабль не войдет в границы поля. давай попробуем снова!\n");
+
+        mapOutput.put("firstMessage", "Начинаем игру!\n");
+        mapOutput.put("x","Попал! так держать!\nСнова твой ход!\n");
+        mapOutput.put("_","Эх, мимо\n");
+        mapOutput.put("win","Победа");
     }
 
     public String getText(String command) { return mapOutput.get(command); }
