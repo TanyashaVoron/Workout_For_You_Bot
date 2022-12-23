@@ -5,7 +5,6 @@ import TelegramBot.Game.PlacesShips;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.text.Position;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -60,47 +59,6 @@ public class TestPlacesShips {
                 }
         }
     }
-
-
-    /*@Test
-    void testFillingFieldsAroundTheShip() {
-        PlacesShips places = new PlacesShips();
-        String[][] clearField = new String[10][10];
-        String[][] resultField = new String[10][10];
-
-        for (int ship = 1; ship < 5; ship++) {
-            for (int bias = 1; bias < 7; bias++) {
-
-
-                for (int first = 0; first < 10; first++) {
-                    for (int second = 0; second < 10; second++) {
-                        clearField[first][second] = "➖";
-                        resultField[first][second] = "➖";
-                    }
-                }
-                while(ship > 0) {
-                    clearField[bias+ship][bias] = "🚢";
-                    resultField[bias+ship][bias] = "🚢";
-                    ship -= 1;
-                }
-                for (int first = 1; first < 9; first++)
-                    for (int second = 1; second < 9; second++) {
-                        if (!Objects.equals(resultField[first][second], "🚢")) {
-                            Boolean a = Objects.equals(resultField[first + 1][second], "🚢") || (Objects.equals(resultField[first][second + 1], "🚢"));
-                            Boolean b = Objects.equals(resultField[first - 1][second], "🚢") || (Objects.equals(resultField[first][second - 1], "🚢"));
-                            Boolean c = Objects.equals(resultField[first + 1][second + 1], "🚢") || (Objects.equals(resultField[first - 1][second - 1], "🚢"));
-                            Boolean d = Objects.equals(resultField[first + 1][second - 1], "🚢") || (Objects.equals(resultField[first - 1][second + 1], "🚢"));
-                            if ((a || b) || (c || d))
-                                resultField[first][second] = "⚓";
-                        }
-                    }
-
-                places.fillingFieldsAroundTheShip(bias, bias, clearField);
-                Assertions.assertEquals(convertToString(resultField), convertToString(clearField));
-
-            }
-        }
-    }*/
 
     @Test
     void testUpdateAvailableCommand() {
