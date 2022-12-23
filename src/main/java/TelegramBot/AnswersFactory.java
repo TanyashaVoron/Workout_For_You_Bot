@@ -45,8 +45,6 @@ public class AnswersFactory
     {
         ArrayList<String> outputStrList = new ArrayList<>();
 
-        System.out.println(availableCommands);
-
         if (!availableCommands.contains(command))
         {
             outputStrList.add(textOutput.getText("error"));
@@ -154,7 +152,6 @@ public class AnswersFactory
         }
         else if(command.equals("game") || game.getFlagGame())
         {
-            System.out.println(availableCommands);
             outputStrList.clear();
             game.setFlagGame();
             String a=game.logics(command);

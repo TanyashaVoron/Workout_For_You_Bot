@@ -4,7 +4,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class User
@@ -25,13 +24,13 @@ public class User
 
     protected void setCommand(String messageText) { answersFactory.command = messageText; }
 
-    protected void objMessageWorkout(String text, Boolean keyKeyboared, Boolean oneTime)
+    protected void objMessageWorkout(String text, Boolean keyKeyboared, Boolean oneTime, ArrayList<String> availableCommands)
     {
         if (keyKeyboared)
         {
             message2.setChatId(id);
             message2.setText(text);
-            keyboard.initKeyboardWorkout(oneTime,answersFactory.getAvailableCommands());
+            keyboard.initKeyboardWorkout(oneTime,availableCommands);
             message2.setReplyMarkup(keyboard.keyboard);
             return;
         }
@@ -46,20 +45,22 @@ public class User
         ArrayList<String> outputStrList = new ArrayList<>(answersFactory.getResponse());
 
         if (Objects.equals(answersFactory.command, "game") || answersFactory.game.getFlagGame()){
-            objMessageWorkout(outputStrList.get(0),false,false);
-            outputObjList.add(message1);
+            ArrayList<String> arrGame = new ArrayList<>();
+            arrGame.add("exit");
+            objMessageWorkout(outputStrList.get(0),true,true,arrGame);
+            outputObjList.add(message2);
             return outputObjList;
         }
         else if (outputStrList.size() > 1)
         {
-            objMessageWorkout(outputStrList.get(0),false,false);
-            objMessageWorkout(outputStrList.get(1),true,true);
+            objMessageWorkout(outputStrList.get(0),false,false,answersFactory.getAvailableCommands());
+            objMessageWorkout(outputStrList.get(1),true,true,answersFactory.getAvailableCommands());
             outputObjList.add(message1);
             outputObjList.add(message2);
             return outputObjList;
         }
 
-        objMessageWorkout(outputStrList.get(0),true,Objects.equals(text, "with you"));
+        objMessageWorkout(outputStrList.get(0),true,Objects.equals(text, "with you"),answersFactory.getAvailableCommands());
         outputObjList.add(message2);
 
         return outputObjList;

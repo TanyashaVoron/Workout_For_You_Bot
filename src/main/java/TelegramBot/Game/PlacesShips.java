@@ -95,7 +95,6 @@ public class PlacesShips {
 
     public void updateAvailableCommand(String[][] field, ArrayList<String> availableCommand)
     {
-        //System.out.println(field);
         availableCommand.clear();
         for(int i=0;i<10;i++)
             for(int j=0;j<10;j++) {
@@ -110,7 +109,7 @@ public class PlacesShips {
 
         for(int i=0;i<10;i++)
         {
-            text.append(i + "️⃣ ");
+            text.append(i).append("️⃣ ");
             for(int j=0;j<10;j++)
                 text.append(" ").append(fieldInput[i][j]);
             text.append("\n");

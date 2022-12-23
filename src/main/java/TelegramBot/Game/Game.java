@@ -1,16 +1,14 @@
 package TelegramBot.Game;
 
-import TelegramBot.TextOutput;
-
 import java.util.ArrayList;
 
-public class Game {
+public class Game
+{
     private final FieldGeneration fieldGenerationPlayer;
     private final FieldGeneration fieldGenerationPlayerBot;
     private final ProcessingPlayerTurn processingTurnPlayer;
     public ProcessingPlayerTurn processingTurnPlayerBot;
     private boolean flagStartGame;
-    private TextOutput textOutput;
     private final RandomGeneratorTurn randomGeneratorTurn;
 
     public Game()
@@ -21,8 +19,6 @@ public class Game {
         processingTurnPlayerBot = new ProcessingPlayerTurn();
 
         flagStartGame = false;
-
-        textOutput = new TextOutput();
         randomGeneratorTurn = new RandomGeneratorTurn();
     }
 
@@ -41,7 +37,6 @@ public class Game {
         while (fieldGenerationPlayerBot.getFlagPlayerPlacesShips() && fieldGenerationPlayerBot.getShipNumber() <= 10)
         {
             fieldGenerationPlayerBot.setTurn(randomGeneratorTurn.randomGeneratorTurn(fieldGenerationPlayerBot.getAvailableCommands()));
-            System.out.println(fieldGenerationPlayerBot.getTurn());
             fieldGenerationPlayerBot.placesShips();
         }
 
