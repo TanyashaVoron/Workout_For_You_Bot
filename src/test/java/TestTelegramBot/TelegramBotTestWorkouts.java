@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.*;
 
-public class TelegramBotTest
+public class TelegramBotTestWorkouts
 {
     private final String[] args = {
             "start", "info", "exit",
@@ -81,7 +81,7 @@ public class TelegramBotTest
     private final HashMap<String,ArrayList<String>> availableCommandsMap = new HashMap<>();
     private final HashMap<String,String> outputStrMap = new HashMap<>();
 
-    TelegramBotTest()
+    TelegramBotTestWorkouts()
     {
         availableCommandsMap.put("start",new ArrayList<>(Arrays.asList("info", "video", "with you")));
         availableCommandsMap.put("info",new ArrayList<>(Arrays.asList("exit", "video", "with you")));
@@ -156,7 +156,7 @@ public class TelegramBotTest
     void test() throws IOException
     {
         AnswersFactory answersFactory = new AnswersFactory();
-        answersFactory.keyTest = true;
+        answersFactory.setKeyTest(true);
 
         for (String arg : args)
         {

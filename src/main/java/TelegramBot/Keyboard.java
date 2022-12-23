@@ -18,6 +18,11 @@ public class Keyboard
         ArrayList<String> listCommands = new ArrayList<>(availableCommands.stream().toList());
         List<KeyboardRow> keyboardRows = new ArrayList<>();
 
+        /*if (listCommands.get(0).length() == 2){
+            listCommands.clear();
+            listCommands.add("exit");
+        }*/
+
         while(!listCommands.isEmpty())
         {
             KeyboardRow keyboardRow = new KeyboardRow();

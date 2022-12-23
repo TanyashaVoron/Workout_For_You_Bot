@@ -6,18 +6,18 @@ import java.util.Objects;
 
 public class FieldGeneration
 {
-    public String turn;
-    public String text;
-    public String[][] field;
-    public ArrayList<String> availableCommands;
-    TextOutput textOutput;
-    ConvertTurn convertTurn;
+    private String turn;
+    private String text;
+    private final String[][] field;
+    private final ArrayList<String> availableCommands;
+    private final TextOutput textOutput;
+    private final ConvertTurn convertTurn;
 
-    public Integer shipNumber;
-    public Boolean vectorShip;
+    private Integer shipNumber;
+    private Boolean vectorShip;
     private String error;
-    public Boolean flagPlayerPlacesShips;
-    PlacesShips placesShips;
+    private Boolean flagPlayerPlacesShips;
+    private final PlacesShips placesShips;
 
     FieldGeneration()
     {
@@ -33,21 +33,42 @@ public class FieldGeneration
 
         for(int i=0;i<10;i++)
             for(int j=0;j<10;j++)
-                field[i][j] = "_";
+                field[i][j] = "➖";
     }
+
+    public void setTurn(String str){
+        turn = str;
+    }
+    public String getTurn(){ return turn; }
+
+    public void setText(String str){
+        text = str;
+    }
+    public String getText(){ return text; }
+
+    public String[][] getField(){ return field; }
+
+    public void clearAvailableCommands(){
+        availableCommands.clear();
+    }
+    public ArrayList<String>  getAvailableCommands(){ return availableCommands; }
+
+    public Integer getShipNumber(){ return shipNumber; }
+
+    public Boolean getFlagPlayerPlacesShips(){ return flagPlayerPlacesShips; }
 
     private void vectorShips()
     {
         vectorShip = false;
         shipNumber++;
-        text = placesShips.vector(field, availableCommands, convertTurn.getfirstCoor(),convertTurn.getSecondCoor())+textOutput.getText("vector");
+        text = textOutput.getText("vector1") + placesShips.vector(field, availableCommands, convertTurn.getfirstCoor(),convertTurn.getSecondCoor())+textOutput.getText("vector2");
     }
 
     private void shipEnd()
     {
-        field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "x";
+        field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "🚢";
         placesShips.fillingFieldsAroundTheShip(convertTurn.getfirstCoor(),convertTurn.getSecondCoor(),field);
-        placesShips.updateavailableCommand(field,availableCommands);
+        placesShips.updateAvailableCommand(field,availableCommands);
         shipNumber++;
     }
 
@@ -55,9 +76,9 @@ public class FieldGeneration
     {
         text += textOutput.getText("ship"+shipNumber.toString());
         text += textOutput.getText("inputRule");
-        field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "x";
+        field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "🚢";
         placesShips.fillingFieldsAroundTheShip(convertTurn.getfirstCoor(),convertTurn.getSecondCoor(),field);
-        placesShips.updateavailableCommand(field,availableCommands);
+        placesShips.updateAvailableCommand(field,availableCommands);
         text += placesShips.convertFieldToString(field);
         shipNumber++;
     }
@@ -72,18 +93,18 @@ public class FieldGeneration
         else if(shipNumber < 4) size=3;
         else size=2;
 
-        if (!Objects.equals(field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()], "_"))
+        if (!Objects.equals(field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()], "➖"))
             error = placesShips.placementOfTheShipOnTheField(size,field,convertTurn.getfirstCoor(),convertTurn.getSecondCoor(),turn);
 
         if (Objects.equals(error, "goingOutOfBounds") || Objects.equals(error, "shipError"))
         {
             shipNumber--;
-            field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "_";
+            field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "➖";
             text = textOutput.getText(error) + "\n";
             return;
         }
 
-        placesShips.updateavailableCommand(field,availableCommands);
+        placesShips.updateAvailableCommand(field,availableCommands);
         text += placesShips.convertFieldToString(field);
         if(shipNumber == 6) shipNumber++;
         else vectorShip = true;
@@ -91,7 +112,7 @@ public class FieldGeneration
 
     private void ship0()
     {
-        placesShips.updateavailableCommand(field, availableCommands);
+        placesShips.updateAvailableCommand(field, availableCommands);
         vectorShip = true;
         text = textOutput.getText("ship0")+textOutput.getText("inputRule")+placesShips.convertFieldToString(field);
     }
@@ -124,9 +145,9 @@ public class FieldGeneration
             if (shipNumber >= 2 && shipNumber <= 6)
             {
                 ship234();
-                if (!Objects.equals(error, "*"))
+                if (!Objects.equals(error, "🥴"))
                 {
-                    error = "*";
+                    error = "🥴";
                     ship234();
                     return;
                 }

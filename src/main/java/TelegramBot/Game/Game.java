@@ -2,14 +2,16 @@ package TelegramBot.Game;
 
 import TelegramBot.TextOutput;
 
+import java.util.ArrayList;
+
 public class Game {
-    public FieldGeneration fieldGenerationPlayer;
+    private final FieldGeneration fieldGenerationPlayer;
     private final FieldGeneration fieldGenerationPlayerBot;
-    public ProcessingPlayerTurn processingTurnPlayer;
+    private final ProcessingPlayerTurn processingTurnPlayer;
     public ProcessingPlayerTurn processingTurnPlayerBot;
     private boolean flagStartGame;
-    TextOutput textOutput;
-    RandomGeneratorTurn randomGeneratorTurn;
+    private TextOutput textOutput;
+    private final RandomGeneratorTurn randomGeneratorTurn;
 
     public Game()
     {
@@ -24,61 +26,68 @@ public class Game {
         randomGeneratorTurn = new RandomGeneratorTurn();
     }
 
+    public Boolean getFieldFlagPlayerPlacesShips() { return fieldGenerationPlayer.getFlagPlayerPlacesShips(); }
+    public ArrayList<String> getFieldAvailableCommands() { return fieldGenerationPlayer.getAvailableCommands(); }
+
+    public Boolean getTurnPlayerFlagStartGame(){ return processingTurnPlayer.getFlagStartGame(); }
+    public ArrayList<String> getProcessingTurnPlayerAvailable(){ return processingTurnPlayer.getAvailableCommands(); }
+
     public void setFlagGame() { flagStartGame = true; }
-    public boolean getFlagGame() { return flagStartGame; }
+    public Boolean getFlagGame() { return flagStartGame; }
+
 
     public String logics(String turn)
     {
-        while (fieldGenerationPlayerBot.flagPlayerPlacesShips && fieldGenerationPlayerBot.shipNumber <= 10)
+        while (fieldGenerationPlayerBot.getFlagPlayerPlacesShips() && fieldGenerationPlayerBot.getShipNumber() <= 10)
         {
-            fieldGenerationPlayerBot.turn = randomGeneratorTurn.randomGeneratorTurn(fieldGenerationPlayerBot.availableCommands);
-            System.out.println(fieldGenerationPlayerBot.turn);
+            fieldGenerationPlayerBot.setTurn(randomGeneratorTurn.randomGeneratorTurn(fieldGenerationPlayerBot.getAvailableCommands()));
+            System.out.println(fieldGenerationPlayerBot.getTurn());
             fieldGenerationPlayerBot.placesShips();
         }
 
-        if (fieldGenerationPlayer.flagPlayerPlacesShips)
+        if (fieldGenerationPlayer.getFlagPlayerPlacesShips())
         {
-            fieldGenerationPlayer.turn = turn;
-            if (fieldGenerationPlayer.shipNumber < 10)
+            fieldGenerationPlayer.setTurn(turn);
+            if (fieldGenerationPlayer.getShipNumber() < 10)
             {
                 fieldGenerationPlayer.placesShips();
-                return fieldGenerationPlayer.text;
+                return fieldGenerationPlayer.getText();
             }
             fieldGenerationPlayer.placesShips();
 
-            processingTurnPlayer.flagStartGame = true;
-            processingTurnPlayerBot.flagStartGame = true;
+            processingTurnPlayer.setFlagStartGame(true);
+            processingTurnPlayerBot.setFlagStartGame(true);
 
-            processingTurnPlayer.createPatternField(fieldGenerationPlayerBot.field);
-            processingTurnPlayerBot.createPatternField(fieldGenerationPlayer.field);
+            processingTurnPlayer.createPatternField(fieldGenerationPlayerBot.getField());
+            processingTurnPlayerBot.createPatternField(fieldGenerationPlayer.getField());
 
             processingTurnPlayer.firstMessage();
             processingTurnPlayerBot.firstMessage();
-            processingTurnPlayerBot.text = "";
-            return processingTurnPlayer.text;
+            processingTurnPlayerBot.setText("");
+            return processingTurnPlayer.getText();
             //return "Поле бота\n" + fieldGenerationPlayerBot.getAvailableCommands() + "\nПоле игрока\n" + fieldGenerationPlayer.getAvailableCommands();
         }
 
-        if(processingTurnPlayer.flagStartGame && processingTurnPlayerBot.flagStartGame)
+        if(processingTurnPlayer.getFlagStartGame() && processingTurnPlayerBot.getFlagStartGame())
         {
-            processingTurnPlayer.turn = turn;
+            processingTurnPlayer.setTurn(turn);
             processingTurnPlayer.makeMovePlayer();
-            processingTurnPlayer.text="\nВаш ход (" + processingTurnPlayer.turn + ")\n"+processingTurnPlayer.text;
+            processingTurnPlayer.setText("\nВаш ход (" + processingTurnPlayer.getTurn() + ")\n"+processingTurnPlayer.getText());
 
-            processingTurnPlayerBot.text = "";
+            processingTurnPlayerBot.setText("");
 
-            if(processingTurnPlayer.flagRepeatTurn)
-                return processingTurnPlayer.text;
+            if(processingTurnPlayer.getFlagRepeatTurn())
+                return processingTurnPlayer.getText();
 
             do {
-                processingTurnPlayerBot.turn = randomGeneratorTurn.randomGeneratorTurnGame(processingTurnPlayerBot.availableCommands);
+                processingTurnPlayerBot.setTurn(randomGeneratorTurn.randomGeneratorTurnGame(processingTurnPlayerBot.getAvailableCommands()));
                 processingTurnPlayerBot.makeMovePlayerBot();
-                processingTurnPlayerBot.text="\nХод бота (" + processingTurnPlayerBot.turn + ")\n"+processingTurnPlayerBot.text;
+                processingTurnPlayerBot.setText("\nХод бота (" + processingTurnPlayerBot.getTurn() + ")\n"+processingTurnPlayerBot.getText());
 
-            } while (processingTurnPlayerBot.flagRepeatTurn);
+            } while (processingTurnPlayerBot.getFlagRepeatTurn());
 
 
-            return processingTurnPlayer.text+"\n"+processingTurnPlayerBot.text;
+            return processingTurnPlayer.getText()+"\n"+processingTurnPlayerBot.getText();
         }
 
         flagStartGame = false;
@@ -87,29 +96,16 @@ public class Game {
 
     public void clear()
     {
-        fieldGenerationPlayer.availableCommands.clear();
-        fieldGenerationPlayer.text="";
+        fieldGenerationPlayer.clearAvailableCommands();
+        fieldGenerationPlayer.setText("");
 
-        fieldGenerationPlayerBot.availableCommands.clear();
-        fieldGenerationPlayerBot.text="";
+        fieldGenerationPlayerBot.clearAvailableCommands();
+        fieldGenerationPlayerBot.setText("");
 
-        processingTurnPlayer.availableCommands.clear();
-        processingTurnPlayer.text="";
+        processingTurnPlayer.clearAvailableCommands();
+        processingTurnPlayer.setText("");
 
-        processingTurnPlayerBot.availableCommands.clear();
-        processingTurnPlayerBot.text="";
+        processingTurnPlayerBot.clearAvailableCommands();
+        processingTurnPlayerBot.setText("");
     }
 }
-
-/*
-00 0
-02 0
-04 0
-06 0
-08 0
-90 1
-70
-50
-99
-77
- */

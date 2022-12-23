@@ -6,18 +6,17 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ProcessingPlayerTurn {
-    public String turn;
-    public String text;
-    public String[][] field;
-    public String[][] fieldPattern;
-    public ArrayList<String> availableCommands;
-    TextOutput textOutput;
-    ConvertTurn convertTurn;
-    public Boolean flagStartGame;
-
-    public Boolean flagRepeatTurn;
-    PlacesShips placesShips;
-    ProcessingPlayerTurn()
+    private String turn;
+    private String text;
+    private final String[][] field;
+    private final String[][] fieldPattern;
+    private final ArrayList<String> availableCommands;
+    private final TextOutput textOutput;
+    private final ConvertTurn convertTurn;
+    private Boolean flagStartGame;
+    private Boolean flagRepeatTurn;
+    private final PlacesShips placesShips;
+    public ProcessingPlayerTurn()
     {
         text = "";
         field = new String[10][10];
@@ -31,22 +30,36 @@ public class ProcessingPlayerTurn {
 
         for(int i=0;i<10;i++)
             for(int j=0;j<10;j++)
-                field[i][j] = "_";
+                field[i][j] = "➖";
     }
+    public void setTurn(String t){ turn = t; }
+    public String getTurn(){ return turn; }
+    public void setText(String t){ text = t; }
+    public String getText(){ return text; }
+    public String[][] getFieldPattern(){ return fieldPattern; }
+    public String[][] getField(){ return field; }
+    public ArrayList<String> getAvailableCommands(){ return availableCommands; }
+    public void clearAvailableCommands(){
+        availableCommands.clear();
+    }
+
+    public void setFlagStartGame(Boolean flag){ flagStartGame = flag; }
+    public Boolean getFlagStartGame(){ return flagStartGame; }
+    public Boolean getFlagRepeatTurn(){ return flagRepeatTurn; }
 
     public void createPatternField(String[][] field)
     {
         for(int i=0;i<10;i++)
             for(int j=0;j<10;j++)
-                if (Objects.equals(field[i][j], "x")) fieldPattern[i][j] = "x";
-                else fieldPattern[i][j] = "_";
+                if (Objects.equals(field[i][j], "🚢")) fieldPattern[i][j] = "🚢";
+                else fieldPattern[i][j] = "➖";
     }
 
-    private Boolean winner()
+    public Boolean winner()
     {
         for(int i=0;i<10;i++)
             for(int j=0;j<10;j++)
-                if (Objects.equals(fieldPattern[i][j], "x")) return false;
+                if (Objects.equals(fieldPattern[i][j], "🚢")) return false;
         return true;
     }
 
@@ -55,15 +68,15 @@ public class ProcessingPlayerTurn {
         if (turn.length() == 2)
             convertTurn.convert(turn);
 
-        if(Objects.equals(fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()], "_"))
+        if(Objects.equals(fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()], "➖"))
         {
-            text=textOutput.getText("_");
-            field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "#";
-            placesShips.updateavailableCommand(field,availableCommands);
+            text=textOutput.getText("➖");
+            field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "🗯";
+            placesShips.updateAvailableCommand(field,availableCommands);
             text+=placesShips.convertFieldToString(field);
             flagRepeatTurn = false;
         }
-        else if(Objects.equals(fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()], "x"))
+        else if(Objects.equals(fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()], "🚢"))
         {
             if(winner())
             {
@@ -71,10 +84,10 @@ public class ProcessingPlayerTurn {
                 flagStartGame = false;
                 return;
             }
-            text=textOutput.getText("x");
-            field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "*";
-            fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "*";
-            placesShips.updateavailableCommand(field,availableCommands);
+            text=textOutput.getText("🚢");
+            field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "🥴";
+            fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "🥴";
+            placesShips.updateAvailableCommand(field,availableCommands);
             text+=placesShips.convertFieldToString(field);
             text+=textOutput.getText("inputRule");
             flagRepeatTurn = true;
@@ -85,7 +98,7 @@ public class ProcessingPlayerTurn {
     {
         text = "";
         text+=textOutput.getText("firstMessage")+textOutput.getText("inputRule");
-        placesShips.updateavailableCommand(field,availableCommands);
+        placesShips.updateAvailableCommand(field,availableCommands);
         text+=placesShips.convertFieldToString(field);
     }
 
@@ -94,15 +107,15 @@ public class ProcessingPlayerTurn {
         if (turn.length() == 2)
             convertTurn.convert(turn);
 
-        if(Objects.equals(fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()], "_"))
+        if(Objects.equals(fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()], "➖"))
         {
-            field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "#";
-            placesShips.updateavailableCommand(field,availableCommands);
+            field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "🗯";
+            placesShips.updateAvailableCommand(field,availableCommands);
             text+=placesShips.convertFieldToString(field);
             text+=textOutput.getText("inputRule");
             flagRepeatTurn = false;
         }
-        else if(Objects.equals(fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()], "x"))
+        else if(Objects.equals(fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()], "🚢"))
         {
             if(winner())
             {
@@ -111,9 +124,9 @@ public class ProcessingPlayerTurn {
                 return;
             }
 
-            field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "*";
-            fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "*";
-            placesShips.updateavailableCommand(field,availableCommands);
+            field[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "🥴";
+            fieldPattern[convertTurn.getfirstCoor()][convertTurn.getSecondCoor()] = "🥴";
+            placesShips.updateAvailableCommand(field,availableCommands);
             flagRepeatTurn = true;
         }
     }

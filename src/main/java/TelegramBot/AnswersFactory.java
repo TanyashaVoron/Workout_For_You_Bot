@@ -17,7 +17,8 @@ public class AnswersFactory
     private Boolean partOfBody;
     private Integer numberCommandEx;
     private final Parsing parsing;
-    public boolean keyTest = false;
+    private boolean keyTest = false;
+
     protected Game game;
     public AnswersFactory()
     {
@@ -37,6 +38,8 @@ public class AnswersFactory
     public Boolean getPartOfBody() { return partOfBody; }
 
     public Integer getNumberCommandEx() { return numberCommandEx; }
+
+    public void setKeyTest(Boolean key) { keyTest = key; }
 
     public ArrayList<String> getResponse() throws IOException
     {
@@ -157,11 +160,11 @@ public class AnswersFactory
             String a=game.logics(command);
             outputStrList.add(a);
 
-            if(game.fieldGenerationPlayer.flagPlayerPlacesShips)
-                availableCommands.addAll(game.fieldGenerationPlayer.availableCommands);
+            if(game.getFieldFlagPlayerPlacesShips())
+                availableCommands.addAll(game.getFieldAvailableCommands());
 
-            if(game.processingTurnPlayer.flagStartGame)
-                availableCommands.addAll(game.processingTurnPlayer.availableCommands);
+            if(game.getTurnPlayerFlagStartGame())
+                availableCommands.addAll(game.getProcessingTurnPlayerAvailable());
 
             availableCommands.add("exit");
         }

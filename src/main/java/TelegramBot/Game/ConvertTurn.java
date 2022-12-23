@@ -8,7 +8,7 @@ public class ConvertTurn
     private Integer secondCoor;
     private final HashMap<String,Integer> map;
 
-    ConvertTurn()
+    public ConvertTurn()
     {
         map = new HashMap<>();
         map.put("0", 0);
@@ -23,10 +23,10 @@ public class ConvertTurn
         map.put("9", 9);
     }
 
-    protected Integer getfirstCoor() { return firstCoor; }
-    protected Integer getSecondCoor() { return secondCoor; }
+    public Integer getfirstCoor() { return firstCoor; }
+    public Integer getSecondCoor() { return secondCoor; }
     
-    protected void convert(String playerTurn)
+    public void convert(String playerTurn)
     {
         firstCoor = map.get(playerTurn.charAt(0)+"");
         secondCoor = map.get(playerTurn.charAt(1)+"");
