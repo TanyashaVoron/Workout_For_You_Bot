@@ -33,9 +33,9 @@
 ## Пример тренировок по видео и с ботом
 <br>
 <div>
-<img src="https://github.com/TanyashaVoron/WorkoutForYouBot/blob/master/imag/IMG_4671.PNG" width="300">
-<img src="https://github.com/TanyashaVoron/WorkoutForYouBot/blob/master/imag/IMG_4672.PNG" width="300">
-<img src="https://github.com/TanyashaVoron/WorkoutForYouBot/blob/master/imag/IMG_4673.PNG" width="300">
+<img src="https://github.com/TanyashaVoron/WorkoutForYouBot/blob/master/imag/IMG_4671.PNG" width="250">
+<img src="https://github.com/TanyashaVoron/WorkoutForYouBot/blob/master/imag/IMG_4672.PNG" width="250">
+<img src="https://github.com/TanyashaVoron/WorkoutForYouBot/blob/master/imag/IMG_4673.PNG" width="250">
 </div>
 <br>
 
